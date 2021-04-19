@@ -1,0 +1,17 @@
+{
+    "name": "ics/celebrity-bundle",
+    "description": "Bundle for celebrity management",
+    "type": "symfony-bundle",
+    "version": "0.0.1",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "ICS\\CelebrityBundle\\" : "/src"
+        }
+    },
+    "require": {
+        "symfony/framework-bundle": "^5.2",
+        "twig/intl-extra": "^3.3",
+        "ics/qwant-bundle": "^0.0.2"
+    }
+}
