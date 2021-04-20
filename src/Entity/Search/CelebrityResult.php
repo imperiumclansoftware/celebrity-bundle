@@ -2,6 +2,8 @@
 
 namespace ICS\CelebrityBundle\Entity\Search;
 
+use DateTime;
+
 class CelebrityResult
 {
     private $name;
@@ -18,19 +20,19 @@ class CelebrityResult
     {
         $this->name = $celebrityNinjaData->name;
         if (property_exists($celebrityNinjaData, 'birthday')) {
-            $this->birthday = $celebrityNinjaData->birthday;
+            $this->birthday = DateTime::createFromFormat('Y-m-d',$celebrityNinjaData->birthday);
         }
         if (property_exists($celebrityNinjaData, 'deathday')) {
-            $this->deathday = $celebrityNinjaData->deathday;
+            $this->deathday = DateTime::createFromFormat('Y-m-d',$celebrityNinjaData->deathday);
         }
         if (property_exists($celebrityNinjaData, 'age')) {
-            $this->age = $celebrityNinjaData->age;
+            $this->age = (int)$celebrityNinjaData->age;
         }
         if (property_exists($celebrityNinjaData, 'height')) {
-            $this->height = $celebrityNinjaData->height;
+            $this->height = (float)$celebrityNinjaData->height;
         }
         if (property_exists($celebrityNinjaData, 'net_worth')) {
-            $this->netWorth = $celebrityNinjaData->net_worth;
+            $this->netWorth = (float)$celebrityNinjaData->net_worth;
         }
         if (property_exists($celebrityNinjaData, 'nationality')) {
             $this->nationality = $celebrityNinjaData->nationality;

@@ -2,15 +2,28 @@
 
 {% block title %}Celebrity{% endblock %}
 
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="/bundles/celebrity/libs/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" />
+{% endblock %}
+
+{% block javascripts %}
+    {# <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script> #}
+    <script type="text/javascript" src="/bundles/celebrity/libs/fancybox/jquery.fancybox.min.js"></script>
+    <script type="text/javascript" src="/bundles/celebrity/celebrity.js"></script>
+{% endblock %}
+
+
 {% block body %}
 <div class="container-fluid">
     <div class="row my-3">
         <div class="col-12">
-            <h1>Welcome to Celebrity Bundle</h1>
+            <h1><i class="fa fa-user"></i> Welcome to Celebrity Bundle</h1>
         </div>
     </div>
     <div class="row my-3">
         <div class="col-6 offset-3">
+
             <form method="POST">
                 <div class="input-group">
                     <input type="text" class="form-control" name="search" placeholder="Search a celebrity" value="{{ search|default('') }}"/>
@@ -18,9 +31,12 @@
                         <button type="submit" class="btn btn-primary">Search</button>
                     </div>
                 </div>
+                <small class="form-text text-muted">Search a celebrity and you can't add this celebrity to database for unlock advanced options.</small>
             </form>
         </div>
     </div>
+    {% if response %}
+
     <div class="row my-3">
         <div class="col-12">
             {% set nbCol=6 %}
@@ -30,36 +46,41 @@
             {% for item in items %}
                 {% set current = current + 1 %}
                 <div class="card my-3">
-                    <img class="card-img-top" src="{{ item.imageUrl }}"/>
+                    <a class="fancy" href="{{ item.imageUrl }}">
+                        <img class="card-img-top" src="{{ item.imageUrl }}"/>
+                    </a>
                     <div class="card-body">
                         <div class="card-title">{{ item.name }}</div>
                     </div>
                     <div class="list-group list-group-flush">
-                        {% if item.birthday is defined %}
-                        <div class="list-group-item"><label class="text-secondary mr-3">Birthday</label>{{ item.birthday }}</div>
+                        {% if item.birthday %}
+                        <div class="list-group-item"><label class="text-secondary mr-3">Birthday</label>{{ item.birthday|date('d/m/Y') }}</div>
                         {% endif %}
-                        {% if item.deathday is defined %}
-                            <div class="list-group-item"><label class="text-secondary mr-3">Deathday</label>{{ item.deathday }}</div>
+                        {% if item.deathday %}
+                            <div class="list-group-item"><label class="text-secondary mr-3">Deathday</label>{{ item.deathday|date('d/m/Y') }}</div>
                         {% endif %}
-                        {% if item.age is defined %}
+                        {% if item.age %}
                         <div class="list-group-item"><label class="text-secondary mr-3">Age</label>{{ item.age }}</div>
                         {% endif %}
-                        {% if item.height is defined %}
-                        <div class="list-group-item"><label class="text-secondary mr-3">Height</label>{{ item.height }}</div>
+                        {% if item.height %}
+                        <div class="list-group-item"><label class="text-secondary mr-3">Height</label>{{ item.height }} m</div>
                         {% endif %}
-                        {% if item.networth is defined %}
+                        {% if item.networth %}
                         <div class="list-group-item"><label class="text-secondary mr-3">Net Worth</label>{{ item.networth|format_currency('USD') }}</div>
                         {% endif %}
-                        {% if item.nationality is defined %}
+                        {% if item.nationality %}
                         <div class="list-group-item"><label class="text-secondary mr-3">Nationality</label>{{ item.nationality }}</div>
                         {% endif %}
-                        {% if item.occupation is defined %}
+                        {% if item.occupation %}
                             <div class="list-group-item"><label class="text-secondary mr-3">Occupation</label>
                                 {% for occupation in item.occupation %}
                                     <div class="badge badge-primary">{{ occupation }}</div>
                                 {% endfor %}
                             </div>
                         {% endif %}
+                        {# <div class="list-group-item">
+                            {{ dump(item) }}
+                        </div> #}
                     </div>
                 </div>
                 {% endfor %}
@@ -73,6 +94,7 @@
                 </div>
             {% endfor %}
         </div>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

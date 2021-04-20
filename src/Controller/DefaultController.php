@@ -15,8 +15,12 @@ class DefaultController extends AbstractController
     public function index(Request $request, CelebrityNinja $client)
     {
         $search = $request->get('search');
+        $response=null;
 
-        $response = $client->Search($search);
+        if($search!=null)
+        {
+            $response = $client->Search($search);
+        }
 
         return $this->render('@Celebrity/index.html.twig', [
             'search' => $search,
