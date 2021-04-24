@@ -1,0 +1,55 @@
+
+{# {{ dump(results) }} #}
+
+{% for items in results|batch(6,'') %}
+    <div class="card-deck my-3">
+    {% for item in items %}
+        {% if item != '' %}
+            <div class="card">
+                <img class="card-img-top" src="{{ item.thumbnail }}"/>
+                <div class="card-img-overlay">
+                    <h1 class="display-1 text-center text-light">
+                        <i class="fa fa-download downloadIcon" data-url="{{ app.request.scheme ~ ':' ~ item.media_fullsize }}" data-title="{{ item.title }}"></i>
+                    </h1>
+                    <div class="badge badge-info" style="position:absolute;bottom:2px;right:2px;">{{ item.width }}x{{ item.height }}</div>
+                </div>
+            </div>
+            {% else %}
+                <div class="card border-0"></div>
+        {% endif %}
+    {% endfor %}
+    </div>
+{% endfor %}
+
+<script>
+
+    $(document).ready(function(){
+
+        $('i.downloadIcon').click(function(){
+
+            var item=$(this);
+            $(this).removeClass('fa fa-download');
+            $(item).removeClass('downloadIcon');
+            $(this).addClass('fas fa-cog fa-spin');
+
+            $.ajax({
+                url:'{{ downloadUrl }}',
+                method: 'POST',
+                data:{
+                    url: $(item).attr('data-url'),
+                    title: $(item).attr('data-title')
+                }
+            }).done(function(data) {
+                $(item).removeClass('fas fa-cog fa-spin');
+                $(item).addClass('fa fa-check text-success');
+                loadGallery();
+            }).error(function(data){
+                $(item).removeClass('fas fa-cog fa-spin');
+                $(item).addClass('fa fa-remove text-danger');
+            });
+
+        });
+
+    });
+
+</script>

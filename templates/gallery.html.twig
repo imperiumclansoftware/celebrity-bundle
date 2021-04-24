@@ -1,0 +1,10 @@
+{% if celebrity.gallery|length > 0 %}
+        {% for media in celebrity.gallery %}
+            <a class="celeb" data-id="{{ media.id }}" data-fancybox="gallery" href="{{ asset(media.path) }}">
+                <img src="{{ asset(media.path)|imagine_filter('icsCelebrityThumbnail') }}" alt=""/>
+            </a>
+
+        {% endfor %}
+{% else %}
+    <div class="">- {% trans %}No image{% endtrans %} -</div>
+{% endif %}

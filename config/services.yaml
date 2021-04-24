@@ -3,6 +3,8 @@ services:
     autowire: true
     autoconfigure: true
 
+  Twig\Extensions\IntlExtension: ~
+
   ICS\CelebrityBundle\Controller\:
     resource: "../src/Controller"
     tags: ['controller.service_arguments']

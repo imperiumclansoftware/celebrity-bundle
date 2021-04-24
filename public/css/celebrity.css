@@ -1,0 +1,18 @@
+.downloadIcon {
+
+    opacity: 0;
+
+}
+
+.downloadIcon:hover {
+
+    opacity: 1;
+    text-shadow: 5px 5px 5px rgba(0,0,0,.3);
+    cursor: pointer;
+}
+
+.downloadIcon:active {
+
+    opacity: 1;
+    text-shadow: 1px 1px 1px rgba(0,0,0,.3);
+}

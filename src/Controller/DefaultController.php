@@ -10,7 +10,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DefaultController extends AbstractController
 {
     /**
-     * @Route("/", name="ics-celebrity-homepage")
+     * @Route("/addbysearch", name="ics-celebrity-addbysearch")
      */
     public function index(Request $request, CelebrityNinja $client)
     {
@@ -22,7 +22,7 @@ class DefaultController extends AbstractController
             $response = $client->Search($search);
         }
 
-        return $this->render('@Celebrity/index.html.twig', [
+        return $this->render('@Celebrity/search.html.twig', [
             'search' => $search,
             'response' => $response,
         ]);

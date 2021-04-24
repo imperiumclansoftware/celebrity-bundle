@@ -1,0 +1,81 @@
+{% extends "base.html.twig" %}
+{% trans_default_domain('celebrity') %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/celebrity/libs/flag-icon-css/css/flag-icon.min.css') }}"/>
+{% endblock %}
+
+{% block title %}{% trans %}Celebrity index{% endtrans %}{% endblock %}
+
+{% block body %}
+<div class="container-fluid">
+    <div class="row my-3">
+        <div class="col-12">
+            <h1>
+                <i class="fa fa-list"></i> {% trans %}Celebrity index{% endtrans %}
+            </h1>
+            <div class="btn-group btn-sm float-right">
+                <a href="{{ path('ics-celebrity-add') }}" class="btn btn-secondary btn-sm "><i class="fa fa-plus"></i> {% trans %}Add{% endtrans %}</a>
+                <a href="{{ path('ics-celebrity-addbysearch') }}" class="btn btn-primary btn-sm "><i class="fa fa-search"></i> {% trans %}Search{% endtrans %}</a>
+            </div>
+        </div>
+    </div>
+{% for letters in ('A'..'Z')|batch(4,'') %}
+    <div class="row my-3">
+        <div class="col-12">
+            <div class="card-deck">
+            {% for letter in letters %}
+                {% if letter !='' %}
+                <div class="card">
+                        <h3 class="card-header text-center bg-dark text-light">- {{ letter }} -</h3>
+                        <ul class="list-group">
+                        {% if index[letter] is defined %}
+
+                                {% for celebrity in index[letter] %}
+                                    <li class="list-group-item">
+                                        {% if celebrity.gender == 'female' %}
+                                            {% set genderIcon="fa fa-venus" %}
+                                            {% set genderColor="#FF00FF" %}
+                                        {% elseif celebrity.gender=='male' %}
+                                            {% set genderIcon="fa fa-mars" %}
+                                            {% set genderColor="#0000FF" %}
+                                        {% else %}
+                                            {% set genderIcon="fa fa-genderless" %}
+                                        {% endif %}
+                                        {% if celebrity.representative %}
+                                            <img width="32px" class="img-thumbnail" src="{{ asset(celebrity.representative.path)|imagine_filter('icsCelebritySquare') }}"/>
+                                        {% else %}
+                                            <img width="32px" class="img-thumbnail" src="{{ asset('bundles/celebrity/images/No-image-available.png')|imagine_filter('icsCelebritySquare') }}"/>
+                                        {% endif %}
+                                        <i class="{{ genderIcon }}" style="color: {{ genderColor }};"></i>
+                                        <a href="{{ path('ics-celebrity-show',{id: celebrity.id}) }}">{{ celebrity.name }}</a>
+                                        {% if celebrity.birthday %}
+                                            <small class="text-muted">{{ celebrity.age }} {% trans %}years{% endtrans %}</small>
+                                        {% endif %}
+                                        <div class="float-right">
+                                            <span class="badge badge-dark"><i class="fas fa-images"></i> {{ celebrity.gallery|length }}</span>
+                                            {% if celebrity.nationality %}
+                                            <span class="flag-icon flag-icon-{{ celebrity.nationality|lower }}"></span>
+                                            {% endif %}
+                                        </div>
+
+                                    </li>
+                                {% endfor %}
+                        {% else %}
+                            <li class="list-group-item text-center text-muted">- {% trans %}No entry{% endtrans %}  -</li>
+                        {% endif %}
+                        </ul>
+
+                </div>
+                {% else %}
+                    <div class="card border-0"></div>
+                {% endif %}
+            {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endfor %}
+</div>
+
+{% endblock %}

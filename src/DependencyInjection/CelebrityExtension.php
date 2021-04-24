@@ -5,9 +5,10 @@ namespace ICS\CelebrityBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
-class CelebrityExtension extends Extension
+class CelebrityExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritdoc}
@@ -21,5 +22,30 @@ class CelebrityExtension extends Extension
         // $configs = $this->processConfiguration($configuration, $configs);
 
         // $container->setParameter('dashboard', $configs);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../../config/'));
+        $bundles = $container->getParameter('kernel.bundles');
+
+        if (isset($bundles['NavigationBundle'])) {
+            $loader->load('navigation.yaml');
+        }
+
+        if (isset($bundles['LiipImagineBundle'])) {
+            $loader->load('liip_imagine.yaml');
+        }
+
+        // if (isset($bundles['FrameworkExtraBundle'])) {
+        //     $loader->load('framework_extra.yaml');
+        // }
+
+        // if (isset($bundles['DashboardBundle'])) {
+        //     $loader->load('dashboard.yaml');
+        // }
     }
 }

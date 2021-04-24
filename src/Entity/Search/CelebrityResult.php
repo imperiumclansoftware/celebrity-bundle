@@ -7,13 +7,14 @@ use DateTime;
 class CelebrityResult
 {
     private $name;
+    private $gender;
     private $birthday;
     private $deathday;
     private $age;
     private $height;
     private $netWorth;
     private $nationality;
-    private $occupation;
+    private $occupation=[];
     private $imageUrl;
 
     public function __construct($celebrityNinjaData)
@@ -39,6 +40,9 @@ class CelebrityResult
         }
         if (property_exists($celebrityNinjaData, 'occupation')) {
             $this->occupation = $celebrityNinjaData->occupation;
+        }
+        if (property_exists($celebrityNinjaData, 'gender')) {
+            $this->gender = $celebrityNinjaData->gender;
         }
     }
 
@@ -220,5 +224,30 @@ class CelebrityResult
         $this->imageUrl = $imageUrl;
 
         return $this;
+    }
+
+    /**
+     * Get the value of gender
+     */
+    public function getGender()
+    {
+        return $this->gender;
+    }
+
+    /**
+     * Set the value of gender
+     *
+     * @return  self
+     */
+    public function setGender($gender)
+    {
+        $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getSerialize()
+    {
+        return json_encode($this);
     }
 }

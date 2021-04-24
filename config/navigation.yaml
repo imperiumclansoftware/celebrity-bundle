@@ -1,0 +1,9 @@
+navigation:
+  navbars:
+    main:
+      items:
+        celebrity:
+          lib: Celebrity
+          icon: fa fa-user
+          route: ics-celebrity-list
+          roles: ['ROLE_USER']

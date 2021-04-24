@@ -4,13 +4,13 @@
 
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="/bundles/celebrity/libs/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" />
+    {# <link rel="stylesheet" href="/bundles/celebrity/libs/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" /> #}
 {% endblock %}
 
 {% block javascripts %}
-    {# <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script> #}
+    {# <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script type="text/javascript" src="/bundles/celebrity/libs/fancybox/jquery.fancybox.min.js"></script>
-    <script type="text/javascript" src="/bundles/celebrity/celebrity.js"></script>
+    <script type="text/javascript" src="/bundles/celebrity/celebrity.js"></script> #}
 {% endblock %}
 
 
@@ -18,7 +18,7 @@
 <div class="container-fluid">
     <div class="row my-3">
         <div class="col-12">
-            <h1><i class="fa fa-user"></i> Welcome to Celebrity Bundle</h1>
+            <h1><i class="fa fa-plus"></i> Add Celebrity</h1>
         </div>
     </div>
     <div class="row my-3">
@@ -26,9 +26,13 @@
 
             <form method="POST">
                 <div class="input-group">
+                    <div class="input-group-prepend">
+                        <a class="btn btn-secondary" href="{{ path('ics-celebrity-add') }}"><i class="fa fa-plus"></i> Add</a>
+                    </div>
                     <input type="text" class="form-control" name="search" placeholder="Search a celebrity" value="{{ search|default('') }}"/>
                     <div class="input-group-append">
-                        <button type="submit" class="btn btn-primary">Search</button>
+                        <button class="btn btn-primary" type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Search</button>
+
                     </div>
                 </div>
                 <small class="form-text text-muted">Search a celebrity and you can't add this celebrity to database for unlock advanced options.</small>
@@ -46,11 +50,17 @@
             {% for item in items %}
                 {% set current = current + 1 %}
                 <div class="card my-3">
-                    <a class="fancy" href="{{ item.imageUrl }}">
-                        <img class="card-img-top" src="{{ item.imageUrl }}"/>
-                    </a>
+                    <img class="card-img-top" src="{{ item.imageUrl }}"/>
+                    <div class="card-img-overlay">
+                        <div class="btn-group float-right">
+                            <a href="{{ path('ics-celebrity-add',{celebrityName: item.name}) }}" class="btn btn-secondary">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div class="card-title">{{ item.name }}</div>
+                        <div class="">Genre : {{ item.gender }}</div>
                     </div>
                     <div class="list-group list-group-flush">
                         {% if item.birthday %}
