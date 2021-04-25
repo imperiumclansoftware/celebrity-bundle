@@ -144,7 +144,7 @@
                         {% else %}
                             {% if occupation.maleLib != "" %}{% set occ = occupation.maleLib %}{% endif %}
                         {% endif %}
-                        <a href="#" class="badge badge-primary">{{ occ }}</a>
+                        <a href="{{ path('ics-celebrity-occupation',{ id: occupation.id }) }}" class="badge badge-primary"><i class="fa fa-tag"></i> {{ occ }}</a>
                     {% endfor %}
                 </div>
             </div>

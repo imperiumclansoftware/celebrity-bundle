@@ -59,25 +59,31 @@ class CelebrityMediaDownloader
             $url
         );
 
-        $filename=$this->slugger->slug(strtolower($celebrity->getName())).'_'.str_pad((count($celebrity->getGallery()) + 1),5,"0",STR_PAD_LEFT);
+        if (200 == $response->getStatusCode()) {
+            $filename=$this->slugger->slug(strtolower($celebrity->getName())).'_'.str_pad((count($celebrity->getGallery()) + 1),5,"0",STR_PAD_LEFT);
 
-        $fileHandler = fopen($fulldir.'/'.$filename, 'w');
-        foreach ($this->client->stream($response) as $chunk) {
-            fwrite($fileHandler, $chunk->getContent());
+            $fileHandler = fopen($fulldir.'/'.$filename, 'w');
+            foreach ($this->client->stream($response) as $chunk) {
+                fwrite($fileHandler, $chunk->getContent());
+            }
+
+            $extention=explode('/',mime_content_type($fulldir.'/'.$filename));
+            $extention=$extention[1];
+
+            rename($fulldir.'/'.$filename,$fulldir.'/'.$filename.'.'.$extention);
+
+            $media=new MediaImage($this->kernel->getContainer());
+            $media->load($fulldir.'/'.$filename.'.'.$extention,$celebGalleryDir);
+
+            $celebrity->addToGallery($media);
+
+            $this->doctrine->persist($celebrity);
+            $this->doctrine->flush();
         }
-
-        $extention=explode('/',mime_content_type($fulldir.'/'.$filename));
-        $extention=$extention[1];
-
-        rename($fulldir.'/'.$filename,$fulldir.'/'.$filename.'.'.$extention);
-
-        $media=new MediaImage($this->kernel->getContainer());
-        $media->load($fulldir.'/'.$filename.'.'.$extention,$celebGalleryDir);
-
-        $celebrity->addToGallery($media);
-
-        $this->doctrine->persist($celebrity);
-        $this->doctrine->flush();
+        else
+        {
+            throw new Exception('Download error');
+        }
 
     }
 }

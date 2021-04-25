@@ -162,7 +162,6 @@ class CelebrityController extends AbstractController
     {
         $title=$request->get('title');
         $url=$request->get('url');
-
         try
         {
             $downloader->downloadImage($celebrity,$url,$title);

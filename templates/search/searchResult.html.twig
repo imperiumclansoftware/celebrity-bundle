@@ -43,9 +43,9 @@
                 $(item).removeClass('fas fa-cog fa-spin');
                 $(item).addClass('fa fa-check text-success');
                 loadGallery();
-            }).error(function(data){
+            }).fail(function(data){
                 $(item).removeClass('fas fa-cog fa-spin');
-                $(item).addClass('fa fa-remove text-danger');
+                $(item).addClass('fa fa-ban text-danger');
             });
 
         });
