@@ -54,9 +54,14 @@
                                             <small class="text-muted">{{ celebrity.age }} {% trans %}years{% endtrans %}</small>
                                         {% endif %}
                                         <div class="float-right">
-                                            <span class="badge badge-dark"><i class="fas fa-images"></i> {{ celebrity.gallery|length }}</span>
+                                            {% if celebrity.biography != "" %}
+                                                <span class="badge badge-secondary"><i class="fa fa-book"></i></span>
+                                            {% endif %}
+                                            {% if celebrity.gallery|length > 0 %}
+                                                <span class="badge badge-dark"><i class="fas fa-images"></i> {{ celebrity.gallery|length }}</span>
+                                            {% endif %}
                                             {% if celebrity.nationality %}
-                                            <span class="flag-icon flag-icon-{{ celebrity.nationality|lower }}"></span>
+                                                <span class="flag-icon flag-icon-{{ celebrity.nationality|lower }}"></span>
                                             {% endif %}
                                         </div>
 
