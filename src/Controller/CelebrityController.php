@@ -2,10 +2,12 @@
 
 namespace ICS\CelebrityBundle\Controller;
 
+use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Asset\Packages;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use ICS\QwantBundle\Service\QwantService;
 use ICS\MediaBundle\Entity\MediaImage;
@@ -88,6 +90,16 @@ class CelebrityController extends AbstractController
      */
     public function show(Celebrity $celebrity,WikipediaService $wikipedia)
     {
+        return $this->render('@Celebrity/show.html.twig', [
+            'celebrity' => $celebrity,
+        ]);
+    }
+
+     /**
+     * @Route("/wikipedia/{id}", name="ics-celebrity-wikipedia")
+     */
+    public function wikipedia(WikipediaService $wikipedia, Celebrity $celebrity=null)
+    {
         $wiki=null;
         $wikiPage=null;
 
@@ -97,11 +109,25 @@ class CelebrityController extends AbstractController
             $wiki=$wikipedia->getIntro($wikiResult[0]->title);
             $wikiPage=$wikipedia->getPage($wikiResult[0]->title);
         }
-        return $this->render('@Celebrity/show.html.twig', [
-            'celebrity' => $celebrity,
+
+        return $this->render('@Celebrity/wikipedia.html.twig', [
             'wiki' => $wiki,
             'wikiPage' => $wikiPage
         ]);
+    }
+
+    /**
+     * @Route("/setbio/{id}", name="ics-celebrity-setbio")
+     */
+    public function setBio(Request $request, Celebrity $celebrity)
+    {
+        $bio= $this->remove_html_comments($request->get('bio'));
+        $celebrity->setBiography($bio);
+        $em= $this->getDoctrine()->getManager();
+        $em->persist($celebrity);
+        $em->flush();
+
+        return new Response('ok');
     }
 
     /**
@@ -189,7 +215,7 @@ class CelebrityController extends AbstractController
     /**
      * @Route("/part/representative/set", name="ics-celebrity-representative-set")
      */
-    public function setRepresentative(Request $request,KernelInterface $kernel)
+    public function setRepresentative(Request $request,KernelInterface $kernel,Packages $asset)
     {
         $assetDir=$kernel->getProjectDir().'/public';
         $celebrity=$this->getDoctrine()->getRepository(Celebrity::class)->find((int)$request->get('celebrity'));
@@ -204,10 +230,10 @@ class CelebrityController extends AbstractController
             $em->persist($celebrity);
             $em->flush();
 
-            return new Response('ok');
+            return new Response($asset->getUrl($media->getPath()));
         }
 
-        return new Response('ko');
+        return $this->createNotFoundException();
     }
     /**
      * @Route("/test", name="ics-celebrity-test")
@@ -220,5 +246,9 @@ class CelebrityController extends AbstractController
         // return $this->render('@Celebrity/test.html.twig',[
         //     'celebrities' => $celebrities
         // ]);
+    }
+
+    function remove_html_comments($content = '') {
+        return preg_replace('/<!--(.|\s)*?-->/', '', $content);
     }
 }

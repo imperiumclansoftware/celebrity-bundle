@@ -1,0 +1,17 @@
+{% if wiki %}
+    <h5>
+        <i class="fab fa-wikipedia-w"></i> Wikipedia Page : <small class="text-info">{{ wiki.title }}</small>
+        <button id="setBio" class="btn btn-secondary btn-sm float-right" title="Define to bio"><i class="fas fa-book"></i></button>
+    </h5>
+    <div id="wikipediaIntro">
+        {{ wiki.extract|raw }}
+    </div>
+    <a class="" data-toggle="collapse" href="#wikiPage" role="button" aria-expanded="false" aria-controls="wikiPage">
+        <i class="fas fa-caret-right"></i> Voir la page complète
+    </a>
+    <div class="collapse border" id="wikiPage">
+        {{ wikiPage.text|raw }}
+    </div>
+{% else %}
+    <div class="text-muted text-center">- No page found -</div>
+{% endif %}

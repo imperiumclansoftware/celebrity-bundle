@@ -28,9 +28,9 @@
             <div class="col-12 col-md-2">
                 <h5 class="bg-dark text-light p-3 mb-0"><i class="fas fa-portrait"></i> {% trans %}Representative picture{% endtrans %}</h5>
                 {% if celebrity.representative %}
-                    <img class="img-fluid mb-3 mt-0" src="{{ asset(celebrity.representative.path)|imagine_filter('icsCelebritySquare') }}"/>
+                    <img class="img-fluid mb-3 mt-0" id="representative" src="{{ asset(celebrity.representative.path)|imagine_filter('icsCelebritySquare') }}"/>
                 {% else %}
-                    <img class="img-fluid mb-3 mt-0" src="{{ asset('bundles/celebrity/images/No-image-available.png')|imagine_filter('icsCelebritySquare') }}"/>
+                    <img class="img-fluid mb-3 mt-0" id="representative" src="{{ asset('bundles/celebrity/images/No-image-available.png')|imagine_filter('icsCelebritySquare') }}"/>
                 {% endif %}
                 <h5 class="bg-dark text-light p-3 mb-0"><i class="fa fa-info-circle"></i> {% trans %}Informations{% endtrans %}</h5>
                 <table class="table table-bordered mb-3">
@@ -113,7 +113,9 @@
                     <div class="tab-content">
                     <div id="biography" class="card-body tab-pane active">
                         <h5 class="card-title"><i class="fas fa-book"></i> Biography</h5>
-                        {{ celebrity.biography|raw }}
+                        <div id="biographyText">
+                            {{ celebrity.biography|raw }}
+                        </div>
                     </div>
                     <div id="gallery" class="card-body tab-pane">
                         <h5 class="card-title"><i class="fa fa-images"></i> Gallery</h5>
@@ -139,16 +141,7 @@
                         <div id="result"></div>
                     </div>
                     <div id="wikipedia" class="card-body tab-pane">
-                        {% if wiki %}
-                            <h5>{{ wiki.title }}</h5>
-                            {{ wiki.extract|raw }}
-                            <a class="" data-toggle="collapse" href="#wikiPage" role="button" aria-expanded="false" aria-controls="wikiPage">
-                                <i class="fas fa-caret-right"></i> Voir la page complète
-                            </a>
-                            <div class="collapse border" id="wikiPage">
-                                {{ wikiPage.text|raw }}
-                            </div>
-                         {% endif %}
+
                     </div>
                     </div>
                 </div>
@@ -194,7 +187,7 @@
                 launchSearch($('#webSearch').val(),0);
             });
 
-
+            loadWikipedia();
 
            $('body').on('click', '[data-fancybox-representative]', function() {
                 $.ajax({
@@ -205,11 +198,39 @@
                         source: $('.fancybox-image').attr('src')
                     }
                 }).done(function(data){
-                    //TODO: Manage representative change error
+                    $('#representative').attr('src',data);
                 });
             });
 
         });
+
+        function loadWikipedia()
+        {
+            $('#wikipedia').html('<div class="text-center my-3"><span class="spinner spinner-border" style="width: 3rem; height: 3rem;"></span></div>');
+
+            $.ajax({
+                url:'{{ path('ics-celebrity-wikipedia',{id: celebrity.id}) }}'
+            }).done(function(data){
+
+                $('#wikipedia').html(data);
+
+                $('#setBio').click(function() {
+
+                    $.ajax({
+                        url: '{{ path('ics-celebrity-setbio',{id: celebrity.id}) }}',
+                        data: {
+                            bio : $('#wikipediaIntro').html()
+                        },
+                        method: 'POST'
+                    }).done(function(data){
+                        if(data=='ok')
+                        {
+                            $('#biographyText').html($('#wikipediaIntro').html());
+                        }
+                    });
+                });
+            });
+        }
 
         function launchSearch(search,page)
         {
