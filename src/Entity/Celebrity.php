@@ -11,7 +11,7 @@ use ICS\SsiBundle\Annotation\Log;
 use PhpParser\Node\Expr\Cast\Array_;
 
 /**
- * @ORM\Entity()
+ * @ORM\Entity(repositoryClass="ICS\CelebrityBundle\Repository\CelebrityRepository")
  * @ORM\Table(schema="celebrity")
  * @ORM\InheritanceType("JOINED")
  * @ORM\DiscriminatorColumn(name="discr", type="string")
@@ -74,6 +74,7 @@ class Celebrity
     {
         $this->occupation=new ArrayCollection();
         $this->gallery=new ArrayCollection();
+
     }
 
     public static function FromCelebrityResult(CelebrityResult $result)

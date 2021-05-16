@@ -11,3 +11,6 @@ services:
   ICS\CelebrityBundle\Service\:
     resource: "../src/Service"
     tags: ['controller.service_arguments']
+  ICS\CelebrityBundle\Repository\:
+    resource: "../src/Repository"
+    tags: ['controller.service_arguments']

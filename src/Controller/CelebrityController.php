@@ -2,19 +2,20 @@
 
 namespace ICS\CelebrityBundle\Controller;
 
-use Exception;
-use ICS\CelebrityBundle\Entity\Celebrity;
-use ICS\CelebrityBundle\Entity\Occupation;
-use ICS\CelebrityBundle\Form\Type\CelebrityType;
-use ICS\CelebrityBundle\Service\CelebrityMediaDownloader;
-use ICS\CelebrityBundle\Service\CelebrityNinja;
-use ICS\MediaBundle\Entity\MediaImage;
-use ICS\QwantBundle\Service\QwantService;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\KernelInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use ICS\QwantBundle\Service\QwantService;
+use ICS\MediaBundle\Entity\MediaImage;
+use ICS\CelebrityBundle\Service\WikipediaService;
+use ICS\CelebrityBundle\Service\CelebrityNinja;
+use ICS\CelebrityBundle\Service\CelebrityMediaDownloader;
+use ICS\CelebrityBundle\Form\Type\CelebrityType;
+use ICS\CelebrityBundle\Entity\Occupation;
+use ICS\CelebrityBundle\Entity\Celebrity;
+use Exception;
 
 class CelebrityController extends AbstractController
 {
@@ -85,10 +86,21 @@ class CelebrityController extends AbstractController
     /**
      * @Route("/show/{id}", name="ics-celebrity-show")
      */
-    public function show(Celebrity $celebrity)
+    public function show(Celebrity $celebrity,WikipediaService $wikipedia)
     {
+        $wiki=null;
+        $wikiPage=null;
+
+        $wikiResult=$wikipedia->search($celebrity->getName());
+        if($wikiResult != null && is_array($wikiResult) && count($wikiResult) > 0)
+        {
+            $wiki=$wikipedia->getIntro($wikiResult[0]->title);
+            $wikiPage=$wikipedia->getPage($wikiResult[0]->title);
+        }
         return $this->render('@Celebrity/show.html.twig', [
             'celebrity' => $celebrity,
+            'wiki' => $wiki,
+            'wikiPage' => $wikiPage
         ]);
     }
 
@@ -196,5 +208,17 @@ class CelebrityController extends AbstractController
         }
 
         return new Response('ko');
+    }
+    /**
+     * @Route("/test", name="ics-celebrity-test")
+     */
+    public function getWithNotImage()
+    {
+        // $celebrities = $this->getDoctrine()
+        //                 ->getRepository(Celebrity::class)
+
+        // return $this->render('@Celebrity/test.html.twig',[
+        //     'celebrities' => $celebrities
+        // ]);
     }
 }

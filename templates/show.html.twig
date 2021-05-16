@@ -105,6 +105,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#imageSearch" ><i class="fa fa-globe"></i> Image search</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#wikipedia" ><i class="fab fa-wikipedia-w"></i> Wikipedia</a>
+                            </li>
                         </ul>
                     </div>
                     <div class="tab-content">
@@ -120,15 +123,32 @@
                         <h5 class="card-title"><i class="fa fa-globe"></i> Image search</h5>
                         <div class="row">
                             <div class="col-12 col-md-6 offset-md-3">
-                                <div class="input-group">
-                                    <input id="webSearch" class="form-control" type="text" value="{{ celebrity.name }}"/>
-                                    <div class="input-group-append">
-                                        <button id="webSearchButton" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                <form id="imgSearchForm">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">{{ celebrity.name }}</span>
+                                        </div>
+                                        <input id="webSearch" class="form-control" type="text" value=""/>
+                                        <div class="input-group-append">
+                                            <button type="submit" id="webSearchButton" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         </div>
                         <div id="result"></div>
+                    </div>
+                    <div id="wikipedia" class="card-body tab-pane">
+                        {% if wiki %}
+                            <h5>{{ wiki.title }}</h5>
+                            {{ wiki.extract|raw }}
+                            <a class="" data-toggle="collapse" href="#wikiPage" role="button" aria-expanded="false" aria-controls="wikiPage">
+                                <i class="fas fa-caret-right"></i> Voir la page complète
+                            </a>
+                            <div class="collapse border" id="wikiPage">
+                                {{ wikiPage.text|raw }}
+                            </div>
+                         {% endif %}
                     </div>
                     </div>
                 </div>
@@ -169,9 +189,12 @@
             loadGallery();
             launchSearch($('#webSearch').val(),0);
 
-            $('#webSearchButton').click(function(){
+            $('#imgSearchForm').submit(function(e){
+                e.preventDefault();
                 launchSearch($('#webSearch').val(),0);
             });
+
+
 
            $('body').on('click', '[data-fancybox-representative]', function() {
                 $.ajax({
@@ -196,7 +219,7 @@
                 url: '{{ path('ics-celebrity-gallery-search-result') }}/' + page,
                 method: 'POST',
                 data:{
-                    search: search,
+                    search: '{{ celebrity.name }} ' + search,
                     id: {{ celebrity.id }}
                 }
             }).done(function(data){
