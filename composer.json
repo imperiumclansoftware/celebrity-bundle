@@ -2,7 +2,7 @@
     "name": "ics/celebrity-bundle",
     "description": "Bundle for celebrity management",
     "type": "symfony-bundle",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -17,6 +17,7 @@
         "twig/extra-bundle": "^3.3",
         "ics/medias-bundle": "^0.0.3",
         "liip/imagine-bundle": "^2.6",
-        "friendsofsymfony/ckeditor-bundle": "^2.3"
+        "friendsofsymfony/ckeditor-bundle": "^2.3",
+        "api-platform/core": "^2.6"
     }
 }

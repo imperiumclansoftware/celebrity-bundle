@@ -2,11 +2,13 @@
 
 namespace ICS\CelebrityBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping as ORM;
 use ICS\SsiBundle\Annotation\Log;
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\ArrayCollection;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
+ * @ApiResource
  * @ORM\Entity()
  * @ORM\Table(schema="celebrity")
  * @Log(actions={"all"},property="logMessage")

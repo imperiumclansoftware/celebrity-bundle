@@ -2,11 +2,11 @@
 
 namespace ICS\CelebrityBundle\DependencyInjection;
 
-use Symfony\Component\Config\FileLocator;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Extension\Extension;
-use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
+use Symfony\Component\DependencyInjection\Extension\Extension;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\Config\FileLocator;
 
 class CelebrityExtension extends Extension implements PrependExtensionInterface
 {
@@ -39,6 +39,8 @@ class CelebrityExtension extends Extension implements PrependExtensionInterface
         if (isset($bundles['LiipImagineBundle'])) {
             $loader->load('liip_imagine.yaml');
         }
+
+        $loader->load('api_platform.yaml');
 
         // if (isset($bundles['FrameworkExtraBundle'])) {
         //     $loader->load('framework_extra.yaml');

@@ -2,15 +2,19 @@
 
 namespace ICS\CelebrityBundle\Entity;
 
-use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
+use PhpParser\Node\Expr\Cast\Array_;
+use ICS\SsiBundle\Annotation\Log;
+use ICS\MediaBundle\Entity\MediaImage;
 use ICS\CelebrityBundle\Entity\Search\CelebrityResult;
 use Doctrine\ORM\Mapping as ORM;
-use ICS\MediaBundle\Entity\MediaImage;
-use ICS\SsiBundle\Annotation\Log;
-use PhpParser\Node\Expr\Cast\Array_;
+use Doctrine\Common\Collections\ArrayCollection;
+use DateTime;
+use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
+ * @ApiResource
+ * @ApiResource(attributes={"order"={"name": "ASC"}})
+ *
  * @ORM\Entity(repositoryClass="ICS\CelebrityBundle\Repository\CelebrityRepository")
  * @ORM\Table(schema="celebrity")
  * @ORM\InheritanceType("JOINED")
