@@ -108,6 +108,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#wikipedia" ><i class="fab fa-wikipedia-w"></i> Wikipedia</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#videos" ><i class="fa fa-video"></i> Vidéos</a>
+                            </li>
                         </ul>
                     </div>
                     <div class="tab-content">
@@ -141,6 +144,9 @@
                         <div id="result"></div>
                     </div>
                     <div id="wikipedia" class="card-body tab-pane">
+
+                    </div>
+                    <div id="videos" class="card-body tab-pane">
 
                     </div>
                     </div>
@@ -188,6 +194,7 @@
             });
 
             loadWikipedia();
+            searchVideos();
 
            $('body').on('click', '[data-fancybox-representative]', function() {
                 $.ajax({
@@ -250,6 +257,8 @@
 
         function loadGallery()
         {
+            $('#celebGallery').html('<div class="text-center my-3"><span class="spinner spinner-border" style="width: 3rem; height: 3rem;"></span></div>');
+
             $.ajax({
                 url: '{{ path('ics-celebrity-gallery',{ id: celebrity.id }) }}'
             }).done(function(data){
@@ -270,6 +279,16 @@
             });
 
 
+        }
+
+        function searchVideos()
+        {
+            $('#videos').html('<div class="text-center my-3"><span class="spinner spinner-border" style="width: 3rem; height: 3rem;"></span></div>');
+            $.ajax({
+                url: '{{ path('ics-celebrity-search-videos',{celeb: celebrity.id}) }}'
+            }).done(function(videos){
+                $('#videos').html(videos);
+            })
         }
     </script>
 {% endblock %}

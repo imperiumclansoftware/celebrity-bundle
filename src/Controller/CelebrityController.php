@@ -7,6 +7,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Asset\Packages;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use ICS\QwantBundle\Service\QwantService;
@@ -250,5 +251,17 @@ class CelebrityController extends AbstractController
 
     function remove_html_comments($content = '') {
         return preg_replace('/<!--(.|\s)*?-->/', '', $content);
+    }
+
+    /**
+     * @Route("/search/videos/{celeb}", name="ics-celebrity-search-videos")
+     */
+    public function SearchVideos(QwantService $service,Celebrity $celeb)
+    {
+        $result=$service->search($celeb->getName(),50,0,'videos');
+
+       return $this->render("@Celebrity/search/searchVideos.html.twig",[
+           'videos' => $result->data->result->items
+       ]);
     }
 }
