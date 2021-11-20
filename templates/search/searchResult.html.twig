@@ -9,7 +9,7 @@
                 <img class="card-img-top" src="{{ item.thumbnail }}"/>
                 <div class="card-img-overlay">
                     <h1 class="display-1 text-center text-light">
-                        <i class="fa fa-download downloadIcon" data-url="{{ app.request.scheme ~ ':' ~ item.media_fullsize }}" data-title="{{ item.title }}"></i>
+                        <i class="fa fa-download downloadIcon" data-url="{{ item.media_fullsize }}" data-title="{{ item.title }}"></i>
                     </h1>
                     <div class="badge badge-info" style="position:absolute;bottom:2px;right:2px;">{{ item.width }}x{{ item.height }}</div>
                 </div>
