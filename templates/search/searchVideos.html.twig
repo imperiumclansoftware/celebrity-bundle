@@ -1,22 +1,22 @@
-{% for vids in videos|batch(4,null) %}
-    <div class="card-deck my-3">
-    {% for video in vids %}
-        {% if video == null %}
-            <div class="card border-none"></div>
-        {% else %}
-        <div class="card">
-            <div class="embed-responsive embed-responsive-16by9">
-                <iframe class="embed-responsive-item" src="{{ video.media }}" allowfullscreen></iframe>
-            </div>
-            <div class="card-body">
-                <h4 class="card-title">{{ video.title|raw }}</h4>
-                <div class="text-muted">{{ video.date|date('d/m/Y') }}</div>
-                <p>{{ video.desc|raw }}</p>
-            </div>
-        </div>
-        {% endif %}
-    {% endfor %}
-    </div>
-{% endfor %}              
-
-                
+{% for vids in videos|batch(3,null) %}
+	<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 my-3">
+		{% for video in vids %}
+			<div class="col">
+				{% if video == null %}
+					<div class="card border-none h-100"></div>
+				{% else %}
+					<div class="card">
+						<div class="card-img-top embed-responsive embed-responsive-16by9">
+							<iframe class="card-img-top embed-responsive-item" src="{{ video.media }}" allowfullscreen></iframe>
+						</div>
+						<div class="card-body">
+							<h4 class="card-title">{{ video.title|raw }}</h4>
+							<div class="text-muted">{{ video.date|date('d/m/Y') }}</div>
+							<p>{{ video.desc|raw }}</p>
+						</div>
+					</div>
+				{% endif %}
+			</div>
+		{% endfor %}
+	</div>
+{% endfor %}

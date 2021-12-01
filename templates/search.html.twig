@@ -1,110 +1,110 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Celebrity{% endblock %}
-
-
-{% block stylesheets %}
-    {# <link rel="stylesheet" href="/bundles/celebrity/libs/fancybox/jquery.fancybox.min.css" type="text/css" media="screen" /> #}
+{% block title %}Celebrity
 {% endblock %}
-
-{% block javascripts %}
-    {# <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script type="text/javascript" src="/bundles/celebrity/libs/fancybox/jquery.fancybox.min.js"></script>
-    <script type="text/javascript" src="/bundles/celebrity/celebrity.js"></script> #}
-{% endblock %}
-
 
 {% block body %}
-<div class="container-fluid">
-    <div class="row my-3">
-        <div class="col-12">
-            <h1><i class="fa fa-plus"></i> Add Celebrity</h1>
-        </div>
-    </div>
-    <div class="row my-3">
-        <div class="col-6 offset-3">
+	<div class="container-fluid">
+		<div class="row my-3">
+			<div class="col-12">
+				<h1>
+					<i class="fa fa-plus"></i>
+					Add Celebrity</h1>
+			</div>
+		</div>
+		<div class="row my-3">
+			<div class="col-6 offset-3">
+				<form method="POST">
+					<div class="input-group">
+						<div class="input-group-prepend">
+							<a class="btn btn-secondary" href="{{ path('ics-celebrity-add') }}">
+								<i class="fa fa-plus"></i>
+								Add</a>
+						</div>
+						<input type="text" class="form-control" name="search" placeholder="Search a celebrity" value="{{ search|default('') }}"/>
+						<div class="input-group-append">
+							<button class="btn btn-primary" type="submit" class="btn btn-primary">
+								<i class="fa fa-search"></i>
+								Search</button>
 
-            <form method="POST">
-                <div class="input-group">
-                    <div class="input-group-prepend">
-                        <a class="btn btn-secondary" href="{{ path('ics-celebrity-add') }}"><i class="fa fa-plus"></i> Add</a>
-                    </div>
-                    <input type="text" class="form-control" name="search" placeholder="Search a celebrity" value="{{ search|default('') }}"/>
-                    <div class="input-group-append">
-                        <button class="btn btn-primary" type="submit" class="btn btn-primary"><i class="fa fa-search"></i> Search</button>
+						</div>
+					</div>
+					<small class="form-text text-muted">Search a celebrity and you can't add this celebrity to database for unlock advanced options.</small>
+				</form>
+			</div>
+		</div>
+		{% if response %}
+			<div class="row row-cols-1 row-cols-md-3 row-cols-lg-6">
+				{% for items in response|batch(6,null) %}
+					{% for item in items %}
+						<div class="col">
+							{% if item != null %}
+								<div class="card my-3">
+									<img class="card-img-top" src="{{ item.imageUrl }}"/>
+									<div class="card-img-overlay">
+										<div class="btn-group float-right">
+											<a href="{{ path('ics-celebrity-add',{celebrityName: item.name}) }}" class="btn btn-secondary">
+												<i class="fa fa-plus"></i>
+											</a>
+										</div>
+									</div>
+									<div class="card-body">
+										<div class="card-title">{{ item.name }}</div>
+										<div class="">Genre :
+											{{ item.gender }}</div>
+									</div>
+									<div class="list-group list-group-flush">
+										{% if item.birthday %}
+											<div class="list-group-item">
+												<label class="text-secondary mr-3">Birthday</label>
+												{{ item.birthday|date('d/m/Y') }}</div>
+										{% endif %}
+										{% if item.deathday %}
+											<div class="list-group-item">
+												<label class="text-secondary mr-3">Deathday</label>
+												{{ item.deathday|date('d/m/Y') }}</div>
+										{% endif %}
+										{% if item.age %}
+											<div class="list-group-item">
+												<label class="text-secondary mr-3">Age</label>
+												{{ item.age }}</div>
+										{% endif %}
+										{% if item.height %}
+											<div class="list-group-item">
+												<label class="text-secondary mr-3">Height</label>
+												{{ item.height }}
+												m</div>
+										{% endif %}
+										{% if item.networth %}
+											<div class="list-group-item">
+												<label class="text-secondary mr-3">Net Worth</label>
+												{{ item.networth|format_currency('USD') }}</div>
+										{% endif %}
+										{% if item.nationality %}
+											<div class="list-group-item">
+												<label class="text-secondary mr-3">Nationality</label>
+												{{ item.nationality }}</div>
+										{% endif %}
+										{% if item.occupation %}
+											<div class="list-group-item">
+												<label class="text-secondary mr-3">Occupation</label>
+												{% for occupation in item.occupation %}
+													<div class="badge badge-primary">{{ occupation }}</div>
+												{% endfor %}
+											</div>
+										{% endif %}
+										{# <div class="list-group-item"> #}
+									</div>
+								</div>
 
-                    </div>
-                </div>
-                <small class="form-text text-muted">Search a celebrity and you can't add this celebrity to database for unlock advanced options.</small>
-            </form>
-        </div>
-    </div>
-    {% if response %}
+							{% else %}
+								<div class="card border-0"></div>
+							{% endif %}
+						</div>
+					{% endfor %}
 
-    <div class="row my-3">
-        <div class="col-12">
-            {% set nbCol=6 %}
-            {% for items in response|batch(nbCol) %}
-            <div class="card-deck">
-            {% set current = 0 %}
-            {% for item in items %}
-                {% set current = current + 1 %}
-                <div class="card my-3">
-                    <img class="card-img-top" src="{{ item.imageUrl }}"/>
-                    <div class="card-img-overlay">
-                        <div class="btn-group float-right">
-                            <a href="{{ path('ics-celebrity-add',{celebrityName: item.name}) }}" class="btn btn-secondary">
-                                <i class="fa fa-plus"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <div class="card-title">{{ item.name }}</div>
-                        <div class="">Genre : {{ item.gender }}</div>
-                    </div>
-                    <div class="list-group list-group-flush">
-                        {% if item.birthday %}
-                        <div class="list-group-item"><label class="text-secondary mr-3">Birthday</label>{{ item.birthday|date('d/m/Y') }}</div>
-                        {% endif %}
-                        {% if item.deathday %}
-                            <div class="list-group-item"><label class="text-secondary mr-3">Deathday</label>{{ item.deathday|date('d/m/Y') }}</div>
-                        {% endif %}
-                        {% if item.age %}
-                        <div class="list-group-item"><label class="text-secondary mr-3">Age</label>{{ item.age }}</div>
-                        {% endif %}
-                        {% if item.height %}
-                        <div class="list-group-item"><label class="text-secondary mr-3">Height</label>{{ item.height }} m</div>
-                        {% endif %}
-                        {% if item.networth %}
-                        <div class="list-group-item"><label class="text-secondary mr-3">Net Worth</label>{{ item.networth|format_currency('USD') }}</div>
-                        {% endif %}
-                        {% if item.nationality %}
-                        <div class="list-group-item"><label class="text-secondary mr-3">Nationality</label>{{ item.nationality }}</div>
-                        {% endif %}
-                        {% if item.occupation %}
-                            <div class="list-group-item"><label class="text-secondary mr-3">Occupation</label>
-                                {% for occupation in item.occupation %}
-                                    <div class="badge badge-primary">{{ occupation }}</div>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                        {# <div class="list-group-item">
-                            {{ dump(item) }}
-                        </div> #}
-                    </div>
-                </div>
-                {% endfor %}
-
-                {% if current != nbCol %}
-                    {% set val = nbCol-current %}
-                    {% for i in 1..val %}
-                            <div class="card border-0"></div>
-                    {% endfor %}
-                {% endif %}
-                </div>
-            {% endfor %}
-        </div>
-        {% endif %}
-    </div>
-</div>
+				{% endfor %}
+			</div>
+		{% endif %}
+	</div>
 {% endblock %}

@@ -2,293 +2,314 @@
 {% trans_default_domain('celebrity') %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('bundles/celebrity/libs/flag-icon-css/css/flag-icon.min.css') }}"/>
-    <link rel="stylesheet" href="{{ asset('bundles/celebrity/libs/fancybox/jquery.fancybox.min.css') }}" type="text/css" media="screen" />
-    <link rel="stylesheet" href="{{ asset('bundles/celebrity/libs/justifiedGallery/justifiedGallery.min.css') }}" />
-    <link rel="stylesheet" href="{{ asset('bundles/celebrity/css/celebrity.css') }}"/>
+	<link rel="stylesheet" href="{{ asset('bundles/celebrity/libs/flag-icon-css/css/flag-icon.min.css') }}"/>
+	<link rel="stylesheet" href="{{ asset('bundles/celebrity/libs/fancybox/jquery.fancybox.min.css') }}" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="{{ asset('bundles/celebrity/libs/justifiedGallery/justifiedGallery.min.css') }}"/>
+	<link rel="stylesheet" href="{{ asset('bundles/celebrity/css/celebrity.css') }}"/>
 
 {% endblock %}
 
-{% block title %}{{ celebrity.name }}{% endblock %}
+{% block title %}
+	{{ celebrity.name }}
+{% endblock %}
 
 {% block body %}
-    <div class="container-fluid my-3">
-        <div class="row">
-            <div class="col-12">
-                <h1>
-                    <i class="fa fa-user"></i>
-                    {{ celebrity.name }}
-                    <div class="btn-group float-right">
-                        <a class="btn btn-warning" href="{{ path('ics-celebrity-edit',{id: celebrity.id}) }}"><i class="fa fa-edit"></i></a>
-                    </div>
-                </h1>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12 col-md-2">
-                <h5 class="bg-dark text-light p-3 mb-0"><i class="fas fa-portrait"></i> {% trans %}Representative picture{% endtrans %}</h5>
-                {% if celebrity.representative %}
-                    <img class="img-fluid mb-3 mt-0" id="representative" src="{{ asset(celebrity.representative.path)|imagine_filter('icsCelebritySquare') }}"/>
-                {% else %}
-                    <img class="img-fluid mb-3 mt-0" id="representative" src="{{ asset('bundles/celebrity/images/No-image-available.png')|imagine_filter('icsCelebritySquare') }}"/>
-                {% endif %}
-                <h5 class="bg-dark text-light p-3 mb-0"><i class="fa fa-info-circle"></i> {% trans %}Informations{% endtrans %}</h5>
-                <table class="table table-bordered mb-3">
-                    {% if celebrity.gender %}
-                    <tr>
-                        <th class="bg-dark text-light">{% trans %}Gender{% endtrans %}</th>
-                        <td>
-                            {% if celebrity.gender == 'female' %}
-                                {% set genderIcon="fa fa-venus" %}
-                                {% set genderColor="#FF00FF" %}
-                            {% elseif celebrity.gender=='male' %}
-                                {% set genderIcon="fa fa-mars" %}
-                                {% set genderColor="#0000FF" %}
-                            {% else %}
-                                {% set genderIcon="fa fa-genderless" %}
-                            {% endif %}
-                            <i class="{{ genderIcon }}" style="color: {{ genderColor }};"></i> {{ celebrity.gender|trans() }}
-                        </td>
-                    <tr>
-                    {% endif %}
-                    {% if celebrity.birthday %}
-                    <tr>
-                        <th class="bg-dark text-light">{% trans %}Birthday{% endtrans %}</th>
-                        <td>{{ celebrity.birthday|format_datetime('short','none') }}</td>
-                    <tr>
-                    {% endif %}
-                    {% if celebrity.deathday %}
-                    <tr>
-                        <th class="bg-dark text-light">{% trans %}Deathday{% endtrans %}</th>
-                        <td>{{ celebrity.deathday|format_datetime('short','none') }}</td>
-                    <tr>
-                    {% endif %}
-                    {% if celebrity.birthday %}
-                    <tr>
-                        <th class="bg-dark text-light">{% trans %}Age{% endtrans %}</th>
-                        <td>{{ celebrity.age }} {% trans %}years{% endtrans %}</td>
-                    <tr>
-                    {% endif %}
-                    {% if celebrity.height %}
-                    <tr>
-                        <th class="bg-dark text-light">{% trans %}Height{% endtrans %}</th>
-                        <td>{{ celebrity.height|format_number({rounding_mode: 'floor', fraction_digit: 2}) }} m</td>
-                    <tr>
-                    {% endif %}
-                    {% if celebrity.nationality %}
-                    <tr>
-                        <th class="bg-dark text-light">{% trans %}Nationality{% endtrans %}</th>
-                        <td>
-                            <span class="flag-icon flag-icon-{{ celebrity.nationality|lower }}"></span> {{ celebrity.nationality|country_name() }}
-                        </td>
-                    <tr>
-                    {% endif %}
-                    {% if celebrity.networth %}
-                    <tr>
-                        <th class="bg-dark text-light">{% trans %}Net worth{% endtrans %}</th>
-                        <td>{{ celebrity.networth|format_currency('USD',{fraction_digit: 0}) }}</td>
-                    <tr>
-                    {% endif %}
-                </table>
-            </div>
-            <div class="col-12 col-md-8">
-                <h5 class="bg-dark text-light p-3 mb-0"><i class="fas fa-icons"></i> {% trans %}Associated content{% endtrans %}</h5>
-                <div class="card">
-                    <div class="card-header">
-                        <ul class="nav nav-tabs card-header-tabs">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-toggle="tab" href="#biography"><i class="fas fa-book"></i> Biography</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#gallery"><i class="fa fa-images"></i> Gallery</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#imageSearch" ><i class="fa fa-globe"></i> Image search</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#wikipedia" ><i class="fab fa-wikipedia-w"></i> Wikipedia</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-toggle="tab" href="#videos" ><i class="fa fa-video"></i> Vidéos</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="tab-content">
-                    <div id="biography" class="card-body tab-pane active">
-                        <h5 class="card-title"><i class="fas fa-book"></i> Biography</h5>
-                        <div id="biographyText">
-                            {{ celebrity.biography|raw }}
-                        </div>
-                    </div>
-                    <div id="gallery" class="card-body tab-pane">
-                        <h5 class="card-title"><i class="fa fa-images"></i> Gallery</h5>
-                        <div id="celebGallery"></div>
-                    </div>
-                    <div id="imageSearch" class="card-body tab-pane">
-                        <h5 class="card-title"><i class="fa fa-globe"></i> Image search</h5>
-                        <div class="row">
-                            <div class="col-12 col-md-6 offset-md-3">
-                                <form id="imgSearchForm">
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">{{ celebrity.name }}</span>
-                                        </div>
-                                        <input id="webSearch" class="form-control" type="text" value=""/>
-                                        <div class="input-group-append">
-                                            <button type="submit" id="webSearchButton" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-                        <div id="result"></div>
-                    </div>
-                    <div id="wikipedia" class="card-body tab-pane">
+	<div class="container-fluid my-3">
+		<div class="row">
+			<div class="col-12">
+				<h1>
+					<i class="fa fa-user"></i>
+					{{ celebrity.name }}
+					<div class="btn-group float-end">
+						<a class="btn btn-warning" href="{{ path('ics-celebrity-edit',{id: celebrity.id}) }}">
+							<i class="fa fa-edit"></i>
+						</a>
+					</div>
+				</h1>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-12 col-md-2">
+				<h5 class="bg-dark text-light p-3 mb-0">
+					<i class="fas fa-portrait"></i>
+					{% trans %}Representative picture{% endtrans %}</h5>
+				{% if celebrity.representative %}
+					<img class="img-fluid mb-3 mt-0" id="representative" src="{{ asset(celebrity.representative.path)|imagine_filter('icsCelebritySquare') }}"/>
+				{% else %}
+					<img class="img-fluid mb-3 mt-0" id="representative" src="{{ asset('bundles/celebrity/images/No-image-available.png')|imagine_filter('icsCelebritySquare') }}"/>
+				{% endif %}
+				<h5 class="bg-dark text-light p-3 mb-0">
+					<i class="fa fa-info-circle"></i>
+					{% trans %}Informations{% endtrans %}</h5>
+				<table class="table table-bordered mb-3">
+					{% if celebrity.gender %}
+						<tr>
+							<th class="bg-dark text-light">{% trans %}Gender{% endtrans %}</th>
+							<td>
+								{% if celebrity.gender == 'female' %}
+									{% set genderIcon="fa fa-venus" %}
+									{% set genderColor="#FF00FF" %}
+								{% elseif celebrity.gender=='male' %}
+									{% set genderIcon="fa fa-mars" %}
+									{% set genderColor="#0000FF" %}
+								{% else %}
+									{% set genderIcon="fa fa-genderless" %}
+								{% endif %}
+								<i class="{{ genderIcon }}" style="color: {{ genderColor }};"></i>
+								{{ celebrity.gender|trans() }}
+							</td>
+						</tr>
+					{% endif %}
+					{% if celebrity.birthday %}
+						<tr>
+							<th class="bg-dark text-light">{% trans %}Birthday{% endtrans %}</th>
+							<td>{{ celebrity.birthday|format_datetime('short','none') }}</td>
+						</tr>
+					{% endif %}
+					{% if celebrity.deathday %}
+						<tr>
+							<th class="bg-dark text-light">{% trans %}Deathday{% endtrans %}</th>
+							<td>{{ celebrity.deathday|format_datetime('short','none') }}</td>
+						</tr>
+					{% endif %}
+					{% if celebrity.birthday %}
+						<tr>
+							<th class="bg-dark text-light">{% trans %}Age{% endtrans %}</th>
+							<td>{{ celebrity.age }}
+								{% trans %}years{% endtrans %}</td>
+						</tr>
+					{% endif %}
+					{% if celebrity.height %}
+						<tr>
+							<th class="bg-dark text-light">{% trans %}Height{% endtrans %}</th>
+							<td>{{ celebrity.height|format_number({rounding_mode: 'floor', fraction_digit: 2}) }}
+								m</td>
+						</tr>
+					{% endif %}
+					{% if celebrity.nationality %}
+						<tr>
+							<th class="bg-dark text-light">{% trans %}Nationality{% endtrans %}</th>
+							<td>
+								<span class="flag-icon flag-icon-{{ celebrity.nationality|lower }}"></span>
+								{{ celebrity.nationality|country_name() }}</td>
+						</tr>
+					{% endif %}
+					{% if celebrity.networth %}
+						<tr>
+							<th class="bg-dark text-light">{% trans %}Net worth{% endtrans %}</th>
+							<td>{{ celebrity.networth|format_currency('USD',{fraction_digit: 0}) }}</td>
+						</tr>
+					{% endif %}
+				</table>
+			</div>
+			<div class="col-12 col-md-8">
+				<h5 class="bg-dark text-light p-3 mb-0">
+					<i class="fas fa-icons"></i>
+					{% trans %}Associated content{% endtrans %}</h5>
+				<div class="card">
+					<div class="card-header">
+						<ul class="nav nav-tabs card-header-tabs">
+							<li class="nav-item">
+								<a class="nav-link active" data-bs-toggle="tab" href="#biography">
+									<i class="fas fa-book"></i>
+									Biography</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" data-bs-toggle="tab" href="#gallery">
+									<i class="fa fa-images"></i>
+									Gallery</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" data-bs-toggle="tab" href="#imageSearch">
+									<i class="fa fa-globe"></i>
+									Image search</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" data-bs-toggle="tab" href="#wikipedia">
+									<i class="fab fa-wikipedia-w"></i>
+									Wikipedia</a>
+							</li>
+							<li class="nav-item">
+								<a class="nav-link" data-bs-toggle="tab" href="#videos">
+									<i class="fa fa-video"></i>
+									Vidéos</a>
+							</li>
+						</ul>
+					</div>
+					<div class="tab-content">
+						<div id="biography" class="card-body tab-pane active">
+							<h5 class="card-title">
+								<i class="fas fa-book"></i>
+								Biography</h5>
+							<div id="biographyText">
+								{{ celebrity.biography|raw }}
+							</div>
+						</div>
+						<div id="gallery" class="card-body tab-pane">
+							<h5 class="card-title">
+								<i class="fa fa-images"></i>
+								Gallery</h5>
+							<div id="celebGallery"></div>
+						</div>
+						<div id="imageSearch" class="card-body tab-pane">
+							<h5 class="card-title">
+								<i class="fa fa-globe"></i>
+								Image search</h5>
+							<div class="row my-3">
+								<div class="col-12 col-md-6 offset-md-3">
+									<form id="imgSearchForm">
+										<div class="input-group">
+											<div class="input-group-prepend">
+												<span class="input-group-text">{{ celebrity.name }}</span>
+											</div>
+											<input id="webSearch" class="form-control" type="text" value=""/>
+											<div class="input-group-append">
+												<button type="submit" id="webSearchButton" class="btn btn-primary">
+													<i class="fa fa-search"></i>
+												</button>
+											</div>
+										</div>
+									</form>
+								</div>
+							</div>
+							<div id="result"></div>
+						</div>
+						<div id="wikipedia" class="card-body tab-pane"></div>
+						<div id="videos" class="card-body tab-pane"></div>
+					</div>
+				</div>
 
-                    </div>
-                    <div id="videos" class="card-body tab-pane">
-
-                    </div>
-                    </div>
-                </div>
-
-            </div>
-            <div class="col-12 col-md-2">
-                <h5 class="bg-dark text-light p-3"><i class="fa fa-hammer"></i> {% trans %}Occupation{% endtrans %}</h5>
-                <div>
-                    {% for occupation in celebrity.occupation %}
-                        {% set occ = occupation.code %}
-                        {% if celebrity.gender=='female' %}
-                            {% if occupation.femaleLib != "" %}{% set occ = occupation.femaleLib %}{% endif %}
-                        {% else %}
-                            {% if occupation.maleLib != "" %}{% set occ = occupation.maleLib %}{% endif %}
-                        {% endif %}
-                        <a href="{{ path('ics-celebrity-occupation',{ id: occupation.id }) }}" class="badge badge-primary"><i class="fa fa-tag"></i> {{ occ }}</a>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-    </div>
+			</div>
+			<div class="col-12 col-md-2">
+				<h5 class="bg-dark text-light p-3">
+					<i class="fa fa-hammer"></i>
+					{% trans %}Occupation{% endtrans %}</h5>
+				<div>
+					{% for occupation in celebrity.occupation %}
+						{% set occ = occupation.code %}
+						{% if celebrity.gender=='female' %}
+							{% if occupation.femaleLib != "" %}
+								{% set occ = occupation.femaleLib %}
+							{% endif %}
+						{% else %}
+							{% if occupation.maleLib != "" %}
+								{% set occ = occupation.maleLib %}
+							{% endif %}
+						{% endif %}
+						<a href="{{ path('ics-celebrity-occupation',{ id: occupation.id }) }}" class="btn btn-primary btn-sm my-2">
+							<i class="fa fa-tag"></i>
+							{{ occ }}
+						</a>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 {% block javascripts %}
-    <script type="text/javascript" src="{{ asset('bundles/celebrity/libs/fancybox/jquery.fancybox.min.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('bundles/celebrity/libs/justifiedGallery/jquery.justifiedGallery.min.js') }}"></script>
-    <script>
+	<script type="text/javascript" src="{{ asset('bundles/celebrity/libs/fancybox/jquery.fancybox.min.js') }}"></script>
+	<script type="text/javascript" src="{{ asset('bundles/celebrity/libs/justifiedGallery/jquery.justifiedGallery.min.js') }}"></script>
+	<script>
 
-        $.fancybox.defaults.btnTpl.fb = '<button data-fancybox-representative class="fancybox-button fancybox-button--rep" title="Set representative">' +
-                '<svg viewBox="0 0 24 24">' +
-                    '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!-- Font Awesome Free 5.15.3 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"/></svg>' +
-                '</svg>' +
-            '</button>';
+		$.fancybox.defaults.btnTpl.fb = '<button data-fancybox-representative class="fancybox-button fancybox-button--rep" title="Set representative">' + '<svg viewBox="0 0 24 24">' + '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!-- Font Awesome Free 5.15.3 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) --><path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 96c48.6 0 88 39.4 88 88s-39.4 88-88 88-88-39.4-88-88 39.4-88 88-88zm0 344c-58.7 0-111.3-26.6-146.5-68.2 18.8-35.4 55.6-59.8 98.5-59.8 2.4 0 4.8.4 7.1 1.1 13 4.2 26.6 6.9 40.9 6.9 14.3 0 28-2.7 40.9-6.9 2.3-.7 4.7-1.1 7.1-1.1 42.9 0 79.7 24.4 98.5 59.8C359.3 421.4 306.7 448 248 448z"/></svg>' + '</svg>' + '</button>';
 
 
+$(document).ready(function () {
+loadGallery();
+launchSearch($('#webSearch').val(), 0);
 
-        $(document).ready(function(){
-            loadGallery();
-            launchSearch($('#webSearch').val(),0);
+$('#imgSearchForm').submit(function (e) {
+e.preventDefault();
+launchSearch($('#webSearch').val(), 0);
+});
 
-            $('#imgSearchForm').submit(function(e){
-                e.preventDefault();
-                launchSearch($('#webSearch').val(),0);
-            });
+loadWikipedia();
+searchVideos();
 
-            loadWikipedia();
-            searchVideos();
+$('body').on('click', '[data-fancybox-representative]', function () {
+$.ajax({
+url: '{{ path('ics-celebrity-representative-set') }}',
+method: 'POST',
+data: {
+celebrity: {{ celebrity.id }},
+source: $('.fancybox-image').attr('src')
+}
+}).done(function (data) {
+$('#representative').attr('src', data);
+});
+});
 
-           $('body').on('click', '[data-fancybox-representative]', function() {
-                $.ajax({
-                    url: '{{ path('ics-celebrity-representative-set') }}',
-                    method: 'POST',
-                    data:{
-                        celebrity: {{ celebrity.id }},
-                        source: $('.fancybox-image').attr('src')
-                    }
-                }).done(function(data){
-                    $('#representative').attr('src',data);
-                });
-            });
+});
 
-        });
+function loadWikipedia() {
+$('#wikipedia').html('<div class="text-center my-3"><span class="spinner spinner-border" style="width: 3rem; height: 3rem;"></span></div>');
 
-        function loadWikipedia()
-        {
-            $('#wikipedia').html('<div class="text-center my-3"><span class="spinner spinner-border" style="width: 3rem; height: 3rem;"></span></div>');
+$.ajax({url:'{{ path('ics-celebrity-wikipedia',{id: celebrity.id}) }}'}).done(function (data) {
 
-            $.ajax({
-                url:'{{ path('ics-celebrity-wikipedia',{id: celebrity.id}) }}'
-            }).done(function(data){
+$('#wikipedia').html(data);
 
-                $('#wikipedia').html(data);
+$('#setBio').click(function () {
 
-                $('#setBio').click(function() {
+$.ajax({
+url: '{{ path('ics-celebrity-setbio',{id: celebrity.id}) }}',
+data: {
+bio: $('#wikipediaIntro').html()
+},
+method: 'POST'
+}).done(function (data) {
+if (data == 'ok') {
+$('#biographyText').html($('#wikipediaIntro').html());
+}
+});
+});
+});
+}
 
-                    $.ajax({
-                        url: '{{ path('ics-celebrity-setbio',{id: celebrity.id}) }}',
-                        data: {
-                            bio : $('#wikipediaIntro').html()
-                        },
-                        method: 'POST'
-                    }).done(function(data){
-                        if(data=='ok')
-                        {
-                            $('#biographyText').html($('#wikipediaIntro').html());
-                        }
-                    });
-                });
-            });
-        }
+function launchSearch(search, page) {
+$('#result').html('<div class="text-center my-3"><span class="spinner spinner-border" style="width: 3rem; height: 3rem;"></span></div>');
 
-        function launchSearch(search,page)
-        {
-            $('#result').html('<div class="text-center my-3"><span class="spinner spinner-border" style="width: 3rem; height: 3rem;"></span></div>');
+$.ajax({
+url: '{{ path('ics-celebrity-gallery-search-result') }}/' + page,
+method: 'POST',
+data: {
+search: '{{ celebrity.name }}' + search,
+id: {{ celebrity.id }}
+}
+}).done(function (data) {
+$('#result').html(data);
 
-            $.ajax({
-                url: '{{ path('ics-celebrity-gallery-search-result') }}/' + page,
-                method: 'POST',
-                data:{
-                    search: '{{ celebrity.name }} ' + search,
-                    id: {{ celebrity.id }}
-                }
-            }).done(function(data){
-                $('#result').html(data);
-            });
-        }
+});
+}
 
-        function loadGallery()
-        {
-            $('#celebGallery').html('<div class="text-center my-3"><span class="spinner spinner-border" style="width: 3rem; height: 3rem;"></span></div>');
+function loadGallery() {
+$('#celebGallery').html('<div class="text-center my-3"><span class="spinner spinner-border" style="width: 3rem; height: 3rem;"></span></div>');
 
-            $.ajax({
-                url: '{{ path('ics-celebrity-gallery',{ id: celebrity.id }) }}'
-            }).done(function(data){
-                $('#celebGallery').html(data);
-                $("#celebGallery").justifiedGallery();
-                $("a.celeb").fancybox({
-                    buttons : [
-                        'fb',
-                        "zoom",
-                        //"share",
-                        "slideShow",
-                        //"fullScreen",
-                        "download",
-                        "thumbs",
-                        "close"
-                    ]
-                });
-            });
+$.ajax({url: '{{ path('ics-celebrity-gallery',{ id: celebrity.id }) }}'}).done(function (data) {
+$('#celebGallery').html(data);
+$("#celebGallery").justifiedGallery();
+$("a.celeb").fancybox({
+buttons: [
+'fb',
+"zoom",
+// "share",
+"slideShow",
+// "fullScreen",
+"download",
+"thumbs",
+"close"
+]
+});
+});
 
 
-        }
+}
 
-        function searchVideos()
-        {
-            $('#videos').html('<div class="text-center my-3"><span class="spinner spinner-border" style="width: 3rem; height: 3rem;"></span></div>');
-            $.ajax({
-                url: '{{ path('ics-celebrity-search-videos',{celeb: celebrity.id}) }}'
-            }).done(function(videos){
-                $('#videos').html(videos);
-            })
-        }
-    </script>
+function searchVideos() {
+$('#videos').html('<div class="text-center my-3"><span class="spinner spinner-border" style="width: 3rem; height: 3rem;"></span></div>');
+$.ajax({url: '{{ path('ics-celebrity-search-videos',{celeb: celebrity.id}) }}'}).done(function (videos) {
+$('#videos').html(videos);
+})
+}
+	</script>
 {% endblock %}
