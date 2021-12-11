@@ -42,9 +42,9 @@ class CelebrityExtension extends Extension implements PrependExtensionInterface
 
         $loader->load('api_platform.yaml');
 
-        // if (isset($bundles['FrameworkExtraBundle'])) {
-        //     $loader->load('framework_extra.yaml');
-        // }
+        if (isset($bundles['DoctrineBundle'])) {
+            $loader->load('doctrine.yaml');
+        }
 
         // if (isset($bundles['DashboardBundle'])) {
         //     $loader->load('dashboard.yaml');
