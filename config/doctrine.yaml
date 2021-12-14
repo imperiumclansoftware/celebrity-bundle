@@ -1,7 +1,7 @@
 doctrine:
     orm:
         mappings:
-            DashboardBundle:
+            CelebrityBundle:
                 is_bundle: true
                 type: annotation
                 dir: 'src/Entity'
