@@ -1,6 +1,7 @@
 {% extends "base.html.twig" %}
+{% trans_default_domain('celebrity') %}
 
-{% block title %}Celebrity
+{% block title %}{% trans %}Celebrity{% endtrans %}
 {% endblock %}
 
 {% block body %}
@@ -8,8 +9,8 @@
 		<div class="row my-3">
 			<div class="col-12">
 				<h1>
-					<i class="fa fa-plus"></i>
-					Add Celebrity</h1>
+					<i class="fa fa-plus"></i> 
+					{% trans %}Add Celebrity{% endtrans %}</h1>
 			</div>
 		</div>
 		<div class="row my-3">
@@ -18,18 +19,19 @@
 					<div class="input-group">
 						<div class="input-group-prepend">
 							<a class="btn btn-secondary" href="{{ path('ics-celebrity-add') }}">
-								<i class="fa fa-plus"></i>
-								Add</a>
+								<i class="fa fa-plus"></i> 
+								{% trans %}Add{% endtrans %}</a>
 						</div>
-						<input type="text" class="form-control" name="search" placeholder="Search a celebrity" value="{{ search|default('') }}"/>
+						<input type="text" class="form-control" name="search" placeholder="{% trans %}Search a celebrity{% endtrans %}" value="{{ search|default('') }}"/>
 						<div class="input-group-append">
 							<button class="btn btn-primary" type="submit" class="btn btn-primary">
-								<i class="fa fa-search"></i>
-								Search</button>
+								<i class="fa fa-search"></i> 
+							{% trans %}Search{% endtrans %}</button>
 
 						</div>
 					</div>
-					<small class="form-text text-muted">Search a celebrity and you can't add this celebrity to database for unlock advanced options.</small>
+					<small class="form-text text-muted">
+					{% trans %}Search a celebrity and you can't add this celebrity to database for unlock advanced options.{% endtrans %}</small>
 				</form>
 			</div>
 		</div>
@@ -56,40 +58,40 @@
 									<div class="list-group list-group-flush">
 										{% if item.birthday %}
 											<div class="list-group-item">
-												<label class="text-secondary mr-3">Birthday</label>
+												<label class="text-secondary mr-3">{% trans %}Birthday{% endtrans %}</label>
 												{{ item.birthday|date('d/m/Y') }}</div>
 										{% endif %}
 										{% if item.deathday %}
 											<div class="list-group-item">
-												<label class="text-secondary mr-3">Deathday</label>
+												<label class="text-secondary mr-3">{% trans %}Deathday{% endtrans %}</label>
 												{{ item.deathday|date('d/m/Y') }}</div>
 										{% endif %}
 										{% if item.age %}
 											<div class="list-group-item">
-												<label class="text-secondary mr-3">Age</label>
+												<label class="text-secondary mr-3">{% trans %}Age{% endtrans %}</label>
 												{{ item.age }}</div>
 										{% endif %}
 										{% if item.height %}
 											<div class="list-group-item">
-												<label class="text-secondary mr-3">Height</label>
+												<label class="text-secondary mr-3">{% trans %}Height{% endtrans %}</label>
 												{{ item.height }}
 												m</div>
 										{% endif %}
 										{% if item.networth %}
 											<div class="list-group-item">
-												<label class="text-secondary mr-3">Net Worth</label>
+												<label class="text-secondary mr-3">{% trans %}Net Worth{% endtrans %}</label>
 												{{ item.networth|format_currency('USD') }}</div>
 										{% endif %}
 										{% if item.nationality %}
 											<div class="list-group-item">
-												<label class="text-secondary mr-3">Nationality</label>
+												<label class="text-secondary mr-3">{% trans %}Nationality{% endtrans %}</label>
 												{{ item.nationality }}</div>
 										{% endif %}
 										{% if item.occupation %}
 											<div class="list-group-item">
-												<label class="text-secondary mr-3">Occupation</label>
+												<label class="text-secondary mr-3">{% trans %}Occupation{% endtrans %}</label>
 												{% for occupation in item.occupation %}
-													<div class="badge badge-primary">{{ occupation }}</div>
+													<div class="badge bg-primary text-light">{{ occupation }}</div>
 												{% endfor %}
 											</div>
 										{% endif %}

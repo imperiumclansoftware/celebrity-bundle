@@ -4,6 +4,6 @@ navigation:
       items:
         celebrity:
           lib: Celebrity
-          icon: fa fa-user
-          route: ics-celebrity-list
+          icon: fa fa-users
+          route: ics-celebrity-homepage
           roles: ['ROLE_USER']

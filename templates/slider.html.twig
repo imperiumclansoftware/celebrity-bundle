@@ -1,0 +1,28 @@
+<div id="celebritySlider" class="carousel slide" data-bs-ride="carousel">
+	<div class="carousel-indicators">
+		{% for celebrity in celebrities %}
+			<button type="button" data-bs-target="#celebritySlider" data-bs-slide-to="{{ (loop.index-1) }}" class="{% if loop.first %}active{% endif %}" aria-current="true" aria-label="Slide {{ loop.index }}"></button>
+		{% endfor %}
+	</div>
+	<div class="carousel-inner">
+		{% for celebrity in celebrities %}
+			<div class="carousel-item {% if loop.first %}active{% endif %}">
+				<img src="{{ celebrity.representative.thumbnails['icsCelebritySquare'] }}" class="d-block w-100" alt="{{ celebrity.name }}" onError="$(this).attr('src','{{ asset('bundles/celebrity/images/No-image-available.png') }}');">
+				<div class="carousel-caption d-none d-md-block">
+					<h5>
+						<a class="text-light" href="{{ path('ics-celebrity-show',{id: celebrity.id}) }}">{{ celebrity.name }}</a>
+					</h5>
+					<p>{{ (celebrity.biography|split('</p>')[0] ~ '</p>')|raw }}</p>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+	<button class="carousel-control-prev" type="button" data-bs-target="#celebritySlider" data-bs-slide="prev">
+		<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+		<span class="visually-hidden">Previous</span>
+	</button>
+	<button class="carousel-control-next" type="button" data-bs-target="#celebritySlider" data-bs-slide="next">
+		<span class="carousel-control-next-icon" aria-hidden="true"></span>
+		<span class="visually-hidden">Next</span>
+	</button>
+</div>

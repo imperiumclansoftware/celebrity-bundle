@@ -115,7 +115,9 @@
 									Biography</a>
 							</li>
 							<li class="nav-item">
+								
 								<a class="nav-link" data-bs-toggle="tab" href="#gallery">
+								<span id="galleryCount" class="badge bg-secondary text-light float-end ms-3"></span>	
 									<i class="fa fa-images"></i>
 									Gallery</a>
 							</li>
@@ -283,24 +285,25 @@ $('#result').html(data);
 }
 
 function loadGallery() {
-$('#celebGallery').html('<div class="text-center my-3"><span class="spinner spinner-border" style="width: 3rem; height: 3rem;"></span></div>');
+	$('#celebGallery').html('<div class="text-center my-3"><span class="spinner spinner-border" style="width: 3rem; height: 3rem;"></span></div>');
 
-$.ajax({url: '{{ path('ics-celebrity-gallery',{ id: celebrity.id }) }}'}).done(function (data) {
-$('#celebGallery').html(data);
-$("#celebGallery").justifiedGallery();
-$("a.celeb").fancybox({
-buttons: [
-'fb',
-"zoom",
-// "share",
-"slideShow",
-// "fullScreen",
-"download",
-"thumbs",
-"close"
-]
-});
-});
+	$.ajax({url: '{{ path('ics-celebrity-gallery',{ id: celebrity.id }) }}'}).done(function (data) {
+		$('#celebGallery').html(data);
+		$("#celebGallery").justifiedGallery();
+		$('#galleryCount').html($('.celeb[data-fancybox="gallery"]').length);
+		$("a.celeb").fancybox({
+			buttons: [
+			'fb',
+			"zoom",
+			// "share",
+			"slideShow",
+			// "fullScreen",
+			"download",
+			"thumbs",
+			"close"
+			]
+		});
+	});
 
 
 }

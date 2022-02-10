@@ -1,14 +1,14 @@
 <?php
 namespace ICS\CelebrityBundle\Service;
 
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\EntityManagerInterface;
-use Exception;
-use ICS\CelebrityBundle\Entity\Celebrity;
-use ICS\MediaBundle\Entity\MediaImage;
-use Symfony\Component\HttpKernel\KernelInterface;
-use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
+use ICS\MediaBundle\Entity\MediaImage;
+use ICS\CelebrityBundle\Entity\Celebrity;
+use Exception;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityManager;
 
 class CelebrityMediaDownloader
 {
@@ -60,7 +60,7 @@ class CelebrityMediaDownloader
         );
 
         if (200 == $response->getStatusCode()) {
-            $filename=$this->slugger->slug(strtolower($celebrity->getName())).'_'.str_pad((count($celebrity->getGallery()) + 1),5,"0",STR_PAD_LEFT);
+            $filename=$this->slugger->slug(utf8_encode(strtolower($celebrity->getName()))).'_'.str_pad((count($celebrity->getGallery()) + 1),5,"0",STR_PAD_LEFT);
 
             $fileHandler = fopen($fulldir.'/'.$filename, 'w');
             foreach ($this->client->stream($response) as $chunk) {
@@ -71,9 +71,8 @@ class CelebrityMediaDownloader
             $extention=$extention[1];
 
             rename($fulldir.'/'.$filename,$fulldir.'/'.$filename.'.'.$extention);
-
-            $media=new MediaImage($this->kernel->getContainer());
-            $media->load($fulldir.'/'.$filename.'.'.$extention,$celebGalleryDir);
+            
+            $media=new MediaImage($fulldir.'/'.$filename.'.'.$extention,'celebrity/'.$this->slugger->slug(utf8_encode($celebrity->getName())).'/gallery');
 
             $celebrity->addToGallery($media);
 

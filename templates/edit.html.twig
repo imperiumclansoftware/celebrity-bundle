@@ -1,85 +1,98 @@
 {% extends "base.html.twig" %}
 
 {% block title %}
-{% if editMode %}
-    {% trans %}Edit celebrity{% endtrans %} : {{ celebrity.name }}
-{% else %}
-    {% trans %}Add celebrity{% endtrans %}
-{% endif %}
+	{% if editMode %}
+		{% trans %}Edit celebrity{% endtrans %}
+		:
+		{{ celebrity.name }}
+	{% else %}
+		{% trans %}Add celebrity{% endtrans %}
+	{% endif %}
 
 
 {% endblock %}
 
 {% block body %}
-<div class="container-fluid">
-    <div class="row>">
-        <div class="col-12 col-md-6 offset-md-3">
-            <h1>
-            {% if editMode %}
-                <i class="fa fa-edit"></i> {% trans %}Edit celebrity{% endtrans %} <small class="text-info">{{ celebrity.name }}</small>
-            {% else %}
-                <i class="fa fa-plus"></i> {% trans %}Add celebrity{% endtrans %}
-            {% endif %}
-            </h1>
-        </div>
-    </div>
-    <div class="row>">
-        <div class="col-12 col-md-6 offset-md-3">
-            {{ form_start(form) }}
-            <div class="row">
-                <div class="col-12">
-                    {{ form_row(form.name) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-md-6">
-                    {{ form_row(form.gender) }}
-                </div>
-                <div class="col-12 col-md-6">
-                    {{ form_row(form.height) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-md-6">
-                    {{ form_row(form.birthday) }}
-                </div>
-                <div class="col-12 col-md-6">
-                    {{ form_row(form.deathday) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 col-md-6">
-                    {{ form_row(form.nationality) }}
-                </div>
-                <div class="col-12 col-md-6">
-                    {{ form_row(form.networth) }}
-                </div>
-            </div>
-            {# <div class="row">
-                <div class="col-12">
-                    {{ form_row(form.representative) }}
-                </div>
-            </div> #}
-            <div class="row">
-                <div class="col-12">
-                    {{ form_row(form.occupation) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    {{ form_row(form.biography) }}
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12 text-center">
-                    <button class="btn btn-primary" type="submit">
-                        <i class="fa fa-check"></i> {% trans %}Record{% endtrans %}
-                    </button>
-                </div>
-            </div>
-            {{ form_end(form) }}
-        </div>
-    </div>
-</div>
+	<div class="container-fluid">
+		<div class="row>">
+			<div class="col-12 col-md-6 offset-md-3">
+				<h1>
+					{% if editMode %}
+						<i class="fa fa-edit"></i>
+						{% trans %}Edit celebrity{% endtrans %}
+						<small class="text-info">{{ celebrity.name }}</small>
+					{% else %}
+						<i class="fa fa-plus"></i>
+						{% trans %}Add celebrity{% endtrans %}
+					{% endif %}
+				</h1>
+			</div>
+		</div>
+		<div class="row>">
+			<div class="col-12 col-md-6 offset-md-3">
+				{{ form_start(form) }}
+				<div class="row">
+					<div class="col-12">
+						{{ form_row(form.name) }}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 col-md-6">
+						{{ form_row(form.gender) }}
+					</div>
+					<div class="col-12 col-md-6">
+						{{ form_row(form.height) }}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 col-md-6">
+						{{ form_row(form.birthday) }}
+					</div>
+					<div class="col-12 col-md-6">
+						{{ form_row(form.deathday) }}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12 col-md-6">
+						{{ form_row(form.nationality) }}
+					</div>
+					<div class="col-12 col-md-6">
+						{{ form_row(form.networth) }}
+					</div>
+				</div>
+				{# <div class="row">
+				                <div class="col-12">
+				                    {{ form_row(form.representative) }}
+				                </div>
+				            </div> #}
+				<div class="row">
+					<div class="col-12">
+						{{ form_row(form.occupation) }}
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-12">
+						{{ form_row(form.biography) }}
+					</div>
+				</div>
+				{% if form.gallery is defined %}
+					<div class="row">
+						<div class="col-12">
+							{{ form_row(form.gallery) }}
+						</div>
+					</div>
+				{% endif %}
+				<div class="row">
+					<div class="col-12 text-center">
+						<button class="btn btn-primary" type="submit">
+							<i class="fa fa-check"></i>
+							{% trans %}Record{% endtrans %}
+						</button>
+					</div>
+				</div>
+				{{ form_end(form) }}
+			</div>
+		</div>
+	</div>
 
 {% endblock %}

@@ -2,26 +2,38 @@
 
 namespace ICS\CelebrityBundle\Form\Type;
 
-use ICS\CelebrityBundle\Entity\Celebrity;
-use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
-use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use FOS\CKEditorBundle\Form\Type\CKEditorType;
-use ICS\CelebrityBundle\Entity\Occupation;
-use ICS\MediaBundle\Entity\MediaFile;
-use ICS\MediaBundle\Form\Type\MediaType;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\Extension\Core\Type\CountryType;
-use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
+use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\CurrencyType;
+use Symfony\Component\Form\Extension\Core\Type\CountryType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\BirthdayType;
+use Symfony\Component\Form\AbstractType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use ICS\MediaBundle\Form\Type\MediaCollectionType;
+use ICS\MediaBundle\Entity\MediaFile;
+use ICS\CelebrityBundle\Service\CelebrityMediaDownloader;
+use ICS\CelebrityBundle\Entity\Occupation;
+use ICS\CelebrityBundle\Entity\Celebrity;
+use FOS\CKEditorBundle\Form\Type\CKEditorType;
 
 class CelebrityType extends AbstractType
 {
+    private $slugger;
+
+    public function __construct(SluggerInterface $slugger)
+    {
+        $this->slugger = $slugger;
+    }
+
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+
+        
+
         $builder
             ->add('name', TextType::class, [
                 'required' => false
@@ -56,7 +68,14 @@ class CelebrityType extends AbstractType
             ->add('biography', CKEditorType::class, [
                 'required' => false
             ])
+            
             ;
+
+            if($builder->getData()->getName() != "")
+            {
+                $outputdir = 'celebrity/'.$this->slugger->slug($builder->getData()->getName()).'/gallery';
+                $builder->add('gallery',MediaCollectionType::class,['outputdir' => $outputdir]);
+            }
     }
 
     public function configureOptions(OptionsResolver $resolver)

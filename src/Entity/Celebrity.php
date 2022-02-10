@@ -2,8 +2,8 @@
 
 namespace ICS\CelebrityBundle\Entity;
 
-use PhpParser\Node\Expr\Cast\Array_;
 use ICS\SsiBundle\Annotation\Log;
+use ICS\SearchBundle\Entity\EntitySearchInterface;
 use ICS\MediaBundle\Entity\MediaImage;
 use ICS\CelebrityBundle\Entity\Search\CelebrityResult;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,7 +21,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
  * @ORM\DiscriminatorColumn(name="discr", type="string")
  * @Log(actions={"all"},property="logMessage")
  */
-class Celebrity
+class Celebrity implements EntitySearchInterface
 {
     /**
      * @ORM\Id()
@@ -59,6 +59,7 @@ class Celebrity
     private $nationality;
     /**
      * @ORM\ManyToMany(targetEntity="ICS\CelebrityBundle\Entity\Occupation",inversedBy="celebrities",cascade={"persist","remove"})
+     * @ORM\JoinTable(schema="celebrity")
      */
     private $occupation;
     /**
@@ -67,6 +68,7 @@ class Celebrity
     private $representative;
     /**
      * @ORM\ManyToMany(targetEntity="ICS\MediaBundle\Entity\MediaImage",cascade={"persist","remove"})
+     * @ORM\JoinTable(schema="celebrity")
      */
     private $gallery;
     /**
@@ -386,4 +388,22 @@ class Celebrity
             $this->gallery->add($image);
         }
     }
+
+     // Define name show in search results interface
+     public static function getEntityClearName(): string
+     {
+         return "Celebrities";
+     }
+     // Define Template of the results
+     public static function getSearchTwigTemplate(): string
+     {
+         return "@Celebrity/globalSearch/result.html.twig";
+     }
+     // Define ROLES have access to the results
+     public static function getRolesSearchEnabled(): array
+     {
+         return [
+             'ROLE_USER'
+         ];
+     }
 }

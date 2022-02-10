@@ -1,0 +1,143 @@
+{% extends "base.html.twig" %}
+{% trans_default_domain('celebrity') %}
+
+{% block body %}
+
+	<div class="container-fluid">
+		<div class="row my-3">
+			<div class="col-12">
+                <div class="btn-group float-end">
+                    <a href="{{ path('ics-celebrity-add') }}" class="btn btn-secondary btn-sm ">
+						<i class="fa fa-plus"></i>
+						{% trans %}Add{% endtrans %}</a>
+					<a href="{{ path('ics-celebrity-addbysearch') }}" class="btn btn-primary btn-sm ">
+						<i class="fa fa-search"></i>
+						{% trans %}Search{% endtrans %}</a>
+                    <a class="btn btn-dark btn-sm " href="{{ path('ics-celebrity-list') }}"><i class="fa fa-list"></i> {{ "Celebrity index"|trans }}</a>
+                </div>
+                <h1><i class="fa fa-users"></i> {{ "Celebrities"|trans }}</h1>
+            </div>
+		</div>
+		<div class="row">
+			<div class="col-3">
+				<div class="card">
+					<h3 class="card-header bg-dark text-light">
+						<i class="fas fa-user-clock"></i>
+						{% trans %}Last celebrities updated{% endtrans %}
+					</h3>
+					{% include "@Celebrity/slider.html.twig" %}
+				</div>
+			</div>
+            <div class="col-6">
+				<div class="card">
+					<h3 class="card-header bg-dark text-light">
+						<i class="fas fa-chart-line"></i>
+						{% trans %}Statistics{% endtrans %}
+					</h3>
+                    <div id="nationalityStats">
+                    </div>
+				</div>
+			</div>
+            <div class="col-3">
+				<div class="card">
+					<h3 class="card-header bg-dark text-light">
+						<i class="fas fa-birthday-cake"></i>
+						{% trans %}Birthday this week{% endtrans %} 
+					</h3>
+                    {% for anniv in anniversaries %}
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ (anniv|first).birthday|format_datetime(pattern="dd MMMM") }}
+                        </h5>
+                    </div>
+                        {% for pers in anniv %}
+                            <div class="list-group-item">
+                                <div class="row">
+                                <div class="col-2">
+                                <img class="img-fluid rounded-circle" src="{{ pers.representative.thumbnails['icsCelebritySquare'] }}" onError="$(this).attr('src','{{ asset('bundles/celebrity/images/No-image-available.png') }}');"/>
+                                </div>
+                                <div class="col-10">
+                                <a href="{{ path('ics-celebrity-show',{id: pers.id}) }}">
+                                {{ pers.name }}
+                                </a>
+                                <div class="text-muted">{{ pers.age }} ans</div>
+                                </div>
+                                </div>
+                            </div>    
+                        {% endfor %}
+                    {% endfor %}
+                    
+				</div>
+			</div>
+		</div>
+	</div>
+
+{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('bundles/celebrity/libs/flag-icon-css/css/flag-icon.min.css') }}"/>
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<script src="https://code.highcharts.com/modules/export-data.js"></script>
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
+<script>
+
+$(document).ready(function(){
+    getNationalityStats();
+});
+
+function getNationalityStats()
+{
+    $.ajax({
+        url: '{{ path('ics-celebrity-stats-nationality') }}',
+    }).done(
+        function(data){
+            Highcharts.chart('nationalityStats', {
+                chart: {
+                    plotBackgroundColor: null,
+                    plotBorderWidth: null,
+                    plotShadow: false,
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Celebrities by nationality'
+                },
+                tooltip: {
+                    useHTML: true,
+                    pointFormat: '<span class="flag-icon flag-icon-{point.name}"></span> <b>{point.fullname}</b>: {point.y} celebrities - {point.percentage:.1f} %'
+                },
+                accessibility: {
+                    point: {
+                        valueSuffix: '%'
+                    }
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            useHTML: true,
+                            format: '<span class="flag-icon flag-icon-{point.name}"></span> <b>{point.fullname}</b>: {point.percentage:.1f} %'
+                        }
+                    }
+                },
+                series: [{
+                    name: 'Nationality',
+                    colorByPoint: true,
+                    data: data
+                }]
+            });
+        }
+    )
+    
+}
+
+</script>
+
+
+{% endblock %}

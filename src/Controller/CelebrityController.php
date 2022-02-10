@@ -201,14 +201,15 @@ class CelebrityController extends AbstractController
     {
         $title=$request->get('title');
         $url=$request->get('url');
-        try
-        {
+        // try
+        // {
             $downloader->downloadImage($celebrity,$url,$title);
-        }
-        catch(Exception $ex)
-        {
-            return $this->createNotFoundException($ex->getMessage());
-        }
+        // }
+        // catch(Exception $ex)
+        // {
+            
+        //     return $this->createNotFoundException($ex->getMessage());
+        // }
 
         return new Response('ok');
     }
@@ -221,9 +222,9 @@ class CelebrityController extends AbstractController
         $assetDir=$kernel->getProjectDir().'/public';
         $celebrity=$this->getDoctrine()->getRepository(Celebrity::class)->find((int)$request->get('celebrity'));
         $media= $this->getDoctrine()->getRepository(MediaImage::class)->findOneBy([
-            'path' => $assetDir.$request->get('source')
+            'path' => trim($request->get('source'),'/')
         ]);
-
+        
         if($celebrity!=null && $media!=null)
         {
             $celebrity->setRepresentative($media);

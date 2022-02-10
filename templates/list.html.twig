@@ -53,9 +53,9 @@
 													{% set genderIcon="fa fa-genderless" %}
 												{% endif %}
 												{% if celebrity.representative %}
-													<img width="32px" class="img-thumbnail" src="{{ asset(celebrity.representative.path)|imagine_filter('icsCelebritySquare') }}"/>
+													<img width="48px" class="img-flex rounded-circle me-3" src="{{ asset(celebrity.representative.path)|imagine_filter('icsCelebritySquare') }}" onError="$(this).attr('src','{{ asset('bundles/celebrity/images/No-image-available.png') }}');"/>
 												{% else %}
-													<img width="32px" class="img-thumbnail" src="{{ asset('bundles/celebrity/images/No-image-available.png')|imagine_filter('icsCelebritySquare') }}"/>
+													<img width="48px" class="img-flex" src="{{ asset('bundles/celebrity/images/No-image-available.png')|imagine_filter('icsCelebritySquare') }}"/>
 												{% endif %}
 												<i class="{{ genderIcon }}" style="color: {{ genderColor }};"></i>
 												<a href="{{ path('ics-celebrity-show',{id: celebrity.id}) }}">{{ celebrity.name }}</a>

@@ -1,0 +1,17 @@
+<div class="card mb-3">
+	<div class="row g-0">
+		<div class="col-md-4">
+			<img src="{{ result.representative.thumbnails['icsCelebritySquare'] }}" class="img-fluid rounded-start" alt="{{ result.name }}" onError="$(this).attr('src','{{ asset('bundles/celebrity/images/No-image-available.png') }}');">
+		</div>
+		<div class="col-md-8">
+			<div class="card-body">
+				<h4 class="card-title">{{ hightlight(result.name,search) }}</h4>
+                <div class="btn-group float-end">
+                    <a class="btn btn-primary" href="{{ path('ics-celebrity-show',{id: result.id}) }}">
+                        <i class="fa fa-eye"></i> View
+                    </a>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
