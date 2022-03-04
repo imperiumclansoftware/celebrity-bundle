@@ -15,12 +15,15 @@
 		<div class="row my-3">
 			<div class="col">
 				<div class="btn-group btn-sm float-end">
-					<a href="{{ path('ics-celebrity-add') }}" class="btn btn-secondary btn-sm ">
+					<a class="btn btn-primary btn-sm" href="{{ path('ics-celebrity-homepage') }}">
+							<i class="fa fa-home"></i>
+						</a>
+					<a href="{{ path('ics-celebrity-add') }}" class="btn btn-success btn-sm ">
 						<i class="fa fa-plus"></i>
-						{% trans %}Add{% endtrans %}</a>
-					<a href="{{ path('ics-celebrity-addbysearch') }}" class="btn btn-primary btn-sm ">
+					</a>
+					<a href="{{ path('ics-celebrity-addbysearch') }}" class="btn btn-secondary btn-sm ">
 						<i class="fa fa-search"></i>
-						{% trans %}Search{% endtrans %}</a>
+					</a>
 				</div>
 				<h1>
 					<i class="fa fa-list"></i>

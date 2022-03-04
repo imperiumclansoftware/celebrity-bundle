@@ -21,7 +21,13 @@
 					<i class="fa fa-user"></i>
 					{{ celebrity.name }}
 					<div class="btn-group float-end">
-						<a class="btn btn-warning" href="{{ path('ics-celebrity-edit',{id: celebrity.id}) }}">
+						<a class="btn btn-primary btn-sm" href="{{ path('ics-celebrity-homepage') }}">
+							<i class="fa fa-home"></i>
+						</a>
+						<a class="btn btn-dark btn-sm" href="{{ path('ics-celebrity-list') }}">
+							<i class="fa fa-list"></i>
+						</a>
+						<a class="btn btn-warning btn-sm" href="{{ path('ics-celebrity-edit',{id: celebrity.id}) }}">
 							<i class="fa fa-edit"></i>
 						</a>
 					</div>
