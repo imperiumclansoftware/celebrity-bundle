@@ -83,7 +83,6 @@ class CelebrityRepository extends ServiceEntityRepository implements EntitySearc
             ->orderBy('c.name', 'ASC')
             ->getQuery()
             ->getResult();
-            dump($results);
         return new ArrayCollection($results);
     }
 }
