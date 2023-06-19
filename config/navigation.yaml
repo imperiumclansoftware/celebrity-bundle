@@ -1,6 +1,6 @@
 navigation:
   navbars:
-    main:
+    mainnav:
       items:
         celebrity:
           lib: Celebrity
