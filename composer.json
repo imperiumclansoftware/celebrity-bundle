@@ -2,7 +2,7 @@
     "name": "ics/celebrity-bundle",
     "description": "Bundle for celebrity management",
     "type": "symfony-bundle",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "license": "MIT",
     "autoload": {
         "psr-4": {
